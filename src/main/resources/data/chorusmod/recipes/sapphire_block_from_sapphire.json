@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "chorusmod:sapphire"
+    }
+  },
+  "result": {
+    "item": "chorusmod:sapphire_block"
+  }
+}
