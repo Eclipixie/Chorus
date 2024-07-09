@@ -1,6 +1,7 @@
 package net.eclipixie.chorusmod;
 
 import com.mojang.logging.LogUtils;
+import net.eclipixie.chorusmod.block.ModBlocks;
 import net.eclipixie.chorusmod.item.ModCreativeModeTabs;
 import net.eclipixie.chorusmod.item.ModItems;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -32,6 +33,8 @@ public class ChorusMod {
 
         // register the event bus for items
         ModItems.register(modEventBus);
+        // register the event bus for blocks
+        ModBlocks.register(modEventBus);
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);

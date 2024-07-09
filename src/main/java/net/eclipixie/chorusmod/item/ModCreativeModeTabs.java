@@ -1,6 +1,7 @@
 package net.eclipixie.chorusmod.item;
 
 import net.eclipixie.chorusmod.ChorusMod;
+import net.eclipixie.chorusmod.block.ModBlocks;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -19,6 +20,8 @@ public class ModCreativeModeTabs {
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModItems.SAPPHIRE.get());
                         output.accept(ModItems.RAW_SAPPHIRE.get());
+                        output.accept(ModBlocks.SAPPHIRE_BLOCK.get());
+                        output.accept(ModBlocks.RAW_SAPPHIRE_BLOCK.get());
                     })
                     .build());
 

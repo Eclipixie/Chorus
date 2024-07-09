@@ -2,5 +2,8 @@
   "item.chorusmod.sapphire": "Sapphire",
   "item.chorusmod.raw_sapphire": "Raw Sapphire",
 
+  "block.chorusmod.sapphire_block": "Sapphire Block",
+  "block.chorusmod.raw_sapphire_block": "Raw Sapphire Block",
+
   "creativetab.chorus_tab": "Chorus"
 }
