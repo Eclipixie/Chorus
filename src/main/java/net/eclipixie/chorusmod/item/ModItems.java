@@ -1,6 +1,7 @@
 package net.eclipixie.chorusmod.item;
 
 import net.eclipixie.chorusmod.ChorusMod;
+import net.eclipixie.chorusmod.item.custom.DigeridooItem;
 import net.eclipixie.chorusmod.item.custom.MetalDetectorItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -19,6 +20,11 @@ public class ModItems {
 
     public static final RegistryObject<Item> METAL_DETECTOR = ITEMS.register("metal_detector",
             () -> new MetalDetectorItem(new Item.Properties().durability(100)));
+    public static final RegistryObject<Item> DIGERIDOO = ITEMS.register("digeridoo",
+            () -> new DigeridooItem(new Item.Properties()));
+
+    public static final RegistryObject<Item> STRAWBERRY = ITEMS.register("strawberry",
+            () -> new Item(new Item.Properties().food(ModFoods.STRAWBERRY)));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
