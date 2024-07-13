@@ -2,8 +2,15 @@
   "item.chorusmod.sapphire": "Sapphire",
   "item.chorusmod.raw_sapphire": "Raw Sapphire",
 
+  "item.chorusmod.metal_detector": "Metal Detector",
+
   "block.chorusmod.sapphire_block": "Sapphire Block",
   "block.chorusmod.raw_sapphire_block": "Raw Sapphire Block",
+
+  "block.chorusmod.sapphire_ore": "Sapphire Ore",
+  "block.chorusmod.deepslate_sapphire_ore": "Deepslate Sapphire Ore",
+  "block.chorusmod.nether_sapphire_ore": "Nether Sapphire Ore",
+  "block.chorusmod.end_sapphire_ore": "End Sapphire Ore",
 
   "creativetab.chorus_tab": "Chorus"
 }
