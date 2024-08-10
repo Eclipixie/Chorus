@@ -1,7 +1,6 @@
 {
   "item.chorusmod.sapphire": "Sapphire",
   "item.chorusmod.raw_sapphire": "Raw Sapphire",
-
   "item.chorusmod.metal_detector": "Metal Detector",
   "item.chorusmod.digeridoo": "Digeridoo",
 
@@ -17,5 +16,8 @@
 
   "block.chorusmod.sound_block": "Sound Block",
 
-  "creativetab.chorus_tab": "Chorus"
+  "creativetab.chorus_tab": "Chorus",
+
+  "tooltip.chorusmod.metal_detector.tooltip": "Finds Iron Ore",
+  "tooltip.chorusmod.sound_block.tooltip": "Play a noise"
 }
