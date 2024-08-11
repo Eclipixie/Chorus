@@ -33,7 +33,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(BlockTags.NEEDS_DIAMOND_TOOL)
                 .add(ModBlocks.RAW_SAPPHIRE_BLOCK.get());
 
-        this.tag(Tags.Blocks.NEEDS_NETHERITE_TOOL)
+        this.tag(ModTags.Blocks.NEEDS_SAPPHIRE_TOOL)
                 .add(ModBlocks.END_SAPPHIRE_ORE.get());
 
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE)

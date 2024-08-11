@@ -4,6 +4,17 @@
   "item.chorusmod.metal_detector": "Metal Detector",
   "item.chorusmod.digeridoo": "Digeridoo",
 
+  "item.chorusmod.sapphire_sword": "Sapphire Sword",
+  "item.chorusmod.sapphire_pickaxe": "Sapphire Pickaxe",
+  "item.chorusmod.sapphire_axe": "Sapphire Axe",
+  "item.chorusmod.sapphire_shovel": "Sapphire Shovel",
+  "item.chorusmod.sapphire_hoe": "Sapphire Hoe",
+
+  "item.chorusmod.sapphire_helmet": "Sapphire Helmet",
+  "item.chorusmod.sapphire_chestplate":"Sapphire Chestplate",
+  "item.chorusmod.sapphire_leggings": "Sapphire Leggings",
+  "item.chorusmod.sapphire_boots":"Sapphire Boots",
+
   "block.chorusmod.sapphire_block": "Sapphire Block",
   "block.chorusmod.raw_sapphire_block": "Raw Sapphire Block",
 
