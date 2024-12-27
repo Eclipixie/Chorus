@@ -57,6 +57,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.DIGERIDOO, "generated");
 
         simpleItem(ModItems.STRAWBERRY, "generated");
+
+        simpleItem(ModItems.VOIDBURST_SPYGLASS, "generated");
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item, String type) {

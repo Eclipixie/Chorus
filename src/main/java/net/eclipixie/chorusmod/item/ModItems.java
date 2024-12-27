@@ -1,10 +1,7 @@
 package net.eclipixie.chorusmod.item;
 
 import net.eclipixie.chorusmod.ChorusMod;
-import net.eclipixie.chorusmod.item.custom.DigeridooItem;
-import net.eclipixie.chorusmod.item.custom.MetalDetectorItem;
-import net.eclipixie.chorusmod.item.custom.ModArmorItem;
-import net.eclipixie.chorusmod.item.custom.StrawberryItem;
+import net.eclipixie.chorusmod.item.custom.*;
 import net.minecraft.world.item.*;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -19,6 +16,9 @@ public class ModItems {
             () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> RAW_SAPPHIRE = ITEMS.register("raw_sapphire",
             () -> new Item(new Item.Properties()));
+
+    public static final RegistryObject<Item> VOIDBURST_SPYGLASS = ITEMS.register("voidburst_spyglass",
+            () -> new VoidburstSpyglassItem(new Item.Properties()));
 
     public static final RegistryObject<Item> METAL_DETECTOR = ITEMS.register("metal_detector",
             () -> new MetalDetectorItem(new Item.Properties().durability(100)));
