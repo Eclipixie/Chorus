@@ -4,6 +4,7 @@ import net.eclipixie.chorusmod.ChorusMod;
 import net.eclipixie.chorusmod.item.custom.DigeridooItem;
 import net.eclipixie.chorusmod.item.custom.MetalDetectorItem;
 import net.eclipixie.chorusmod.item.custom.ModArmorItem;
+import net.eclipixie.chorusmod.item.custom.StrawberryItem;
 import net.minecraft.world.item.*;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -25,7 +26,7 @@ public class ModItems {
             () -> new DigeridooItem(new Item.Properties()));
 
     public static final RegistryObject<Item> STRAWBERRY = ITEMS.register("strawberry",
-            () -> new Item(new Item.Properties().food(ModFoods.STRAWBERRY)));
+            () -> new StrawberryItem(new Item.Properties().food(ModFoods.STRAWBERRY)));
 
     public static final RegistryObject<Item> SAPPHIRE_SWORD = ITEMS.register("sapphire_sword",
             () -> new SwordItem(ModToolTiers.SAPPHIRE, 4, 2, new Item.Properties()));
