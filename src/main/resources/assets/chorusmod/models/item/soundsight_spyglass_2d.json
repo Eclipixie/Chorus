@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "chorusmod:item/soundsight_spyglass"
+  }
+}
