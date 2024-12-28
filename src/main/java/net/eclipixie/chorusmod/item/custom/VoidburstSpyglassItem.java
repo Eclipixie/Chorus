@@ -1,5 +1,6 @@
 package net.eclipixie.chorusmod.item.custom;
 
+import net.eclipixie.chorusmod.util.Teleports;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
@@ -44,7 +45,7 @@ public class VoidburstSpyglassItem extends SpyglassItem {
                 )
             );
 
-            VoidburstSpyglassTeleport(pLivingEntity,
+            Teleports.VoidburstTeleport(pLevel, pLivingEntity,
                     hitResult.getBlockPos().getX() + 0.5,
                     hitResult.getBlockPos().getY() + 1,
                     hitResult.getBlockPos().getZ() + 0.5
@@ -56,15 +57,6 @@ public class VoidburstSpyglassItem extends SpyglassItem {
                 System.out.println("used");
                 ((Player)pLivingEntity).getCooldowns().addCooldown(this, 200);
             }
-        }
-    }
-
-    public static void VoidburstSpyglassTeleport(LivingEntity livingEntity, double x, double y, double z) {
-        if (livingEntity.isPassenger()) {
-            livingEntity.dismountTo(x, y, z);
-        }
-        else {
-            livingEntity.teleportTo(x, y, z);
         }
     }
 }

@@ -12,6 +12,7 @@ import net.minecraft.world.item.armortrim.TrimMaterial;
 import net.minecraft.world.item.armortrim.TrimMaterials;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
+import net.minecraftforge.client.model.generators.ModelBuilder;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
@@ -57,14 +58,14 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.DIGERIDOO, "generated");
 
         simpleItem(ModItems.STRAWBERRY, "generated");
-
-        simpleItem(ModItems.VOIDBURST_SPYGLASS, "generated");
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item, String type) {
         return withExistingParent(item.getId().getPath(),
-                new ResourceLocation("item/" + type)).texture("layer0",
-                new ResourceLocation(ChorusMod.MOD_ID,"item/" + item.getId().getPath()));
+                new ResourceLocation("item/" + type)
+        ).texture("layer0",
+                new ResourceLocation(ChorusMod.MOD_ID,"item/" + item.getId().getPath())
+        );
     }
 
     private void trimmedArmorItem(RegistryObject<Item> itemRegistryObject) {
