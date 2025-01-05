@@ -1,11 +1,7 @@
 package net.eclipixie.chorusmod;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.eclipixie.chorusmod.item.custom.SoundsightSpyglassItem;
 import net.eclipixie.chorusmod.item.custom.VoidburstSpyglassItem;
-import net.minecraft.client.CameraType;
-import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGuiEvent;
@@ -29,37 +25,37 @@ public class RenderEventHandler {
 
     @SubscribeEvent
     public static void onRenderOverlay(RenderGuiEvent event) {
-        if (Minecraft.getInstance().player != null &&
-                Minecraft.getInstance().player.isUsingItem() &&
-                Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON) {
-            Type item = Minecraft.getInstance().player.getUseItem().getItem().getClass();
-            if (SCOPE_MAP.containsKey( item )) {
-                // Use GuiGraphics to render
-                int wWidth = Minecraft.getInstance().getWindow().getWidth() / 2;
-                int wHeight = Minecraft.getInstance().getWindow().getHeight() / 2;
-                int texWidth = 64;
-                int texHeight = 32;
-                double texAsp = ((double) texHeight) / ((double) texWidth);
-                double asp = ((double) wHeight) / ((double) wWidth);
-                int offsetX = (int) (wWidth * (texAsp - asp));
-
-                RenderSystem.enableBlend();
-                RenderSystem.blendFuncSeparate(
-                        GlStateManager.SourceFactor.SRC_ALPHA,
-                        GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
-                        GlStateManager.SourceFactor.ONE,
-                        GlStateManager.DestFactor.ZERO
-                );
-                event.getGuiGraphics().blit(SCOPE_MAP.get(item),
-                offsetX, 0,
-                        ((int) Math.round(((double) wWidth) * asp / texAsp)), wHeight,
-                        0, 0,
-                        texWidth, texHeight,
-                        texWidth, texHeight
-                );
-                RenderSystem.defaultBlendFunc();
-                RenderSystem.disableBlend();
-            }
-        }
+//        if (Minecraft.getInstance().player != null &&
+//                Minecraft.getInstance().player.isUsingItem() &&
+//                Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON) {
+//            Type item = Minecraft.getInstance().player.getUseItem().getItem().getClass();
+//            if (SCOPE_MAP.containsKey( item )) {
+//                // Use GuiGraphics to render
+//                int wWidth = Minecraft.getInstance().getWindow().getWidth() / 2;
+//                int wHeight = Minecraft.getInstance().getWindow().getHeight() / 2;
+//                int texWidth = 64;
+//                int texHeight = 32;
+//                double texAsp = ((double) texHeight) / ((double) texWidth);
+//                double asp = ((double) wHeight) / ((double) wWidth);
+//                int offsetX = (int) (wWidth * (texAsp - asp));
+//
+//                RenderSystem.enableBlend();
+//                RenderSystem.blendFuncSeparate(
+//                        GlStateManager.SourceFactor.SRC_ALPHA,
+//                        GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+//                        GlStateManager.SourceFactor.ONE,
+//                        GlStateManager.DestFactor.ZERO
+//                );
+//                event.getGuiGraphics().blit(SCOPE_MAP.get(item),
+//                offsetX, 0,
+//                        ((int) Math.round(((double) wWidth) * asp / texAsp)), wHeight,
+//                        0, 0,
+//                        texWidth, texHeight,
+//                        texWidth, texHeight
+//                );
+//                RenderSystem.defaultBlendFunc();
+//                RenderSystem.disableBlend();
+//            }
+//        }
     }
 }

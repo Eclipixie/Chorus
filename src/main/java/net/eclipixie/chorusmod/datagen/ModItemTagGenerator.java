@@ -2,10 +2,12 @@ package net.eclipixie.chorusmod.datagen;
 
 import net.eclipixie.chorusmod.ChorusMod;
 import net.eclipixie.chorusmod.item.ModItems;
+import net.eclipixie.chorusmod.util.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
@@ -24,6 +26,12 @@ public class ModItemTagGenerator extends ItemTagsProvider {
                 ModItems.SAPPHIRE_CHESTPLATE.get(),
                 ModItems.SAPPHIRE_LEGGINGS.get(),
                 ModItems.SAPPHIRE_BOOTS.get()
+        );
+
+        this.tag(ModTags.Items.IS_SPYGLASS).add(
+                Items.SPYGLASS,
+                ModItems.SOUNDSIGHT_SPYGLASS.get(),
+                ModItems.VOIDBURST_SPYGLASS.get()
         );
     }
 }

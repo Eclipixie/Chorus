@@ -19,6 +19,8 @@ public class ModTags {
     }
 
     public static class Items {
+        public static final TagKey<Item> IS_SPYGLASS = tag("is_spyglass");
+
         private static TagKey<Item> tag(String name) {
             return ItemTags.create(new ResourceLocation(ChorusMod.MOD_ID, name));
         }
