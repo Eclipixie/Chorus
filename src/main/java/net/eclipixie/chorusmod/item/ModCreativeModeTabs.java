@@ -24,6 +24,8 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.VOIDBURST_SPYGLASS.get());
                         output.accept(ModItems.SOUNDSIGHT_SPYGLASS.get());
 
+                        output.accept(ModItems.ENDER_SHARD.get());
+
                         output.accept(ModItems.SAPPHIRE_SWORD.get());
                         output.accept(ModItems.SAPPHIRE_PICKAXE.get());
                         output.accept(ModItems.SAPPHIRE_AXE.get());

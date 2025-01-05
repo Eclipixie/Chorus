@@ -58,6 +58,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.DIGERIDOO, "generated");
 
         simpleItem(ModItems.STRAWBERRY, "generated");
+
+        simpleItem(ModItems.ENDER_SHARD, "generated");
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item, String type) {

@@ -22,6 +22,9 @@ public class ModItems {
     public static final RegistryObject<Item> SOUNDSIGHT_SPYGLASS = ITEMS.register("soundsight_spyglass",
             () -> new SoundsightSpyglassItem(new Item.Properties()));
 
+    public static final RegistryObject<Item> ENDER_SHARD = ITEMS.register("ender_shard",
+            () -> new Item(new Item.Properties()));
+
     public static final RegistryObject<Item> METAL_DETECTOR = ITEMS.register("metal_detector",
             () -> new MetalDetectorItem(new Item.Properties().durability(100)));
     public static final RegistryObject<Item> DIGERIDOO = ITEMS.register("digeridoo",
