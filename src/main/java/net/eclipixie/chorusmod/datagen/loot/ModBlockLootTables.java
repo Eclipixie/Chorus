@@ -37,6 +37,8 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                 block -> createOreDrops(ModBlocks.SAPPHIRE_ORE.get(), ModItems.RAW_SAPPHIRE.get(), 3, 6, true));
         this.add(ModBlocks.END_SAPPHIRE_ORE.get(),
                 block -> createOreDrops(ModBlocks.SAPPHIRE_ORE.get(), ModItems.RAW_SAPPHIRE.get(), 4, 6, true));
+
+        this.dropWhenSilkTouch(ModBlocks.VOIDGLASS.get());
     }
 
     protected LootTable.Builder createOreDrops(Block pBlock, Item item, int min, int max, boolean fortune) {

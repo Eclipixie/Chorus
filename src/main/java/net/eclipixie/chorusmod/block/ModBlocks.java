@@ -2,6 +2,7 @@ package net.eclipixie.chorusmod.block;
 
 import net.eclipixie.chorusmod.ChorusMod;
 import net.eclipixie.chorusmod.block.custom.SoundBlock;
+import net.eclipixie.chorusmod.block.custom.VoidglassBlock;
 import net.eclipixie.chorusmod.item.ModItems;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
@@ -48,6 +49,9 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> SOUND_BLOCK = registerBlock("sound_block",
             () -> new SoundBlock(BlockBehaviour.Properties.copy(Blocks.NOTE_BLOCK)));
+
+    public static final RegistryObject<Block> VOIDGLASS = registerBlock("voidglass",
+            () -> new VoidglassBlock(BlockBehaviour.Properties.copy(Blocks.GLASS).noOcclusion()));
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
