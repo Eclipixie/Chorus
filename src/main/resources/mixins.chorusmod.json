@@ -4,6 +4,7 @@
   "package": "net.eclipixie.chorusmod.mixin",
   "refmap": "mixins.refmap.json",
   "mixins": [
-    "PlayerEntityMixin"
+    "PlayerEntityMixin",
+    "GuiMixin"
   ]
 }
