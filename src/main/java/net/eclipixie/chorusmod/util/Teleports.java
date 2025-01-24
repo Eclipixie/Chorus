@@ -7,17 +7,22 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Fox;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
 
+import java.util.List;
+
 public class Teleports {
-    public static int voidburstInstabilityDuration = 5;
+    public static int voidburstInstabilityDuration = 100;
+    public static float voidburstExplosionRadius = 2.0f;
 
     public static void RandomTeleport(Level pLevel, LivingEntity pEntityLiving, double range) {
         double d0 = pEntityLiving.getX();
@@ -53,7 +58,12 @@ public class Teleports {
     }
 
     public static void VoidburstTeleport(Level pLevel, LivingEntity pLivingEntity, Vec3 pos) {
-        System.out.println("voidburst");
+        // dunno why i need to do this
+        if (!(pLevel instanceof ServerLevel)) {
+            System.out.println("Weird voidburst edge case here");
+            return;
+        }
+
         if (pLivingEntity.isPassenger()) {
             pLivingEntity.stopRiding();
         }
@@ -63,34 +73,51 @@ public class Teleports {
         if (event.isCanceled()) { return; }
 
         pLivingEntity.teleportTo(pos.x, pos.y, pos.z);
-//        SoundEvent soundevent = SoundEvents.ENDERMAN_TELEPORT;
-//
-//        pLevel.playSound(
-//                pLivingEntity,
-//                new BlockPos((int) pos.x, (int) pos.y, (int) pos.z),
-//                soundevent,
-//                SoundSource.NEUTRAL,
-//                5.0f, 1.0f
-//        );
 
-        pLevel.explode(
-                pLivingEntity,
-                pos.x, pos.y, pos.z,
-                5.0f, false,
-                Level.ExplosionInteraction.NONE
-        );
+        boolean unstable = pLivingEntity.getEffect(ModMobEffects.VOID_INSTABILITY.get()) != null;
 
-        if (pLivingEntity.getEffect(ModMobEffects.VOID_INSTABILITY.get()) != null) {
+        if (unstable) {
+            // status effect
             int amplifier = pLivingEntity.getEffect(ModMobEffects.VOID_INSTABILITY.get()).getAmplifier();
+            float radius = voidburstExplosionRadius + amplifier;
 
             pLivingEntity.addEffect(new MobEffectInstance(
                     ModMobEffects.VOID_INSTABILITY.get(),
-                    voidburstInstabilityDuration * 20, amplifier + 1));
+                    voidburstInstabilityDuration, amplifier + 1));
+
+            // explode
+            Level.ExplosionInteraction interaction = amplifier == 0 ?
+                    Level.ExplosionInteraction.NONE :
+                    Level.ExplosionInteraction.MOB;
+
+            Entity entity = amplifier == 0 ? pLivingEntity : (Entity) null;
+
+            pLevel.explode(
+                    entity,
+                    pos.x, pos.y, pos.z,
+                    radius, false,
+                    interaction
+            );
+
+            // teleportation area (do after explosion so that teleported entities take damage)
+            AABB bb = new AABB(
+                    pos.x - radius, pos.y - radius, pos.z - radius,
+                    pos.x + radius, pos.y + radius, pos.z + radius);
+
+            List<LivingEntity> entities = pLevel.getEntitiesOfClass(LivingEntity.class, bb);
+
+            for (int i = 0; i < entities.size(); i++) {
+                LivingEntity teleportingEntity = entities.get(i);
+
+                if (teleportingEntity == pLivingEntity) continue;
+
+                RandomTeleport(pLevel, teleportingEntity);
+            }
         }
         else {
             pLivingEntity.addEffect(new MobEffectInstance(
                     ModMobEffects.VOID_INSTABILITY.get(),
-                    voidburstInstabilityDuration * 20, 0));
+                    voidburstInstabilityDuration, 0));
         }
     }
 

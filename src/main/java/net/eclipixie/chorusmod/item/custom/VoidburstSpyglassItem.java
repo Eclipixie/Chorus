@@ -1,8 +1,10 @@
 package net.eclipixie.chorusmod.item.custom;
 
+import net.eclipixie.chorusmod.mobeffects.ModMobEffects;
 import net.eclipixie.chorusmod.util.Teleports;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -40,7 +42,14 @@ public class VoidburstSpyglassItem extends SpyglassItem {
                 ((Player)pLivingEntity).getCooldowns().addCooldown(this, 200);
             }
 
-            // teleport
+            // status effects
+            pLivingEntity.addEffect(new MobEffectInstance(
+                    ModMobEffects.VOID_INSTABILITY.get(),
+                    Teleports.voidburstInstabilityDuration,
+                    0)
+            );
+
+            // raycast
             Vec3 origin = pLivingEntity.getEyePosition();
             Vec3 target = origin.add(pLivingEntity.getLookAngle().normalize().scale(50.));
             BlockHitResult hitResult = pLevel.clip(new ClipContext(
@@ -52,6 +61,7 @@ public class VoidburstSpyglassItem extends SpyglassItem {
                 )
             );
 
+            // teleport
             Teleports.VoidburstTeleport(pLevel, pLivingEntity,
                     hitResult.getBlockPos().getX() + 0.5,
                     hitResult.getBlockPos().getY() + 1,
