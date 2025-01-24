@@ -1,6 +1,7 @@
 package net.eclipixie.chorusmod.block.custom;
 
 import net.eclipixie.chorusmod.block.ModBlocks;
+import net.eclipixie.chorusmod.util.Teleports;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -11,6 +12,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.GlassBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 
 public class VoidglassBlock extends GlassBlock {
     public VoidglassBlock(Properties pProperties) {
@@ -54,7 +56,7 @@ public class VoidglassBlock extends GlassBlock {
         x += 0.5f;
         z += 0.5f;
 
-        pPlayer.teleportTo(x, y, z);
+        Teleports.VoidburstTeleport(pLevel, pPlayer, new Vec3(x, y, z));
 
         return InteractionResult.SUCCESS;
     }

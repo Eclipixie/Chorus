@@ -34,6 +34,13 @@ public class VoidburstSpyglassItem extends SpyglassItem {
         }
 
         if (pLivingEntity.isCrouching() && !cd) {
+            // set cooldowns immediately
+            if (pLivingEntity instanceof Player) {
+                System.out.println("used");
+                ((Player)pLivingEntity).getCooldowns().addCooldown(this, 200);
+            }
+
+            // teleport
             Vec3 origin = pLivingEntity.getEyePosition();
             Vec3 target = origin.add(pLivingEntity.getLookAngle().normalize().scale(50.));
             BlockHitResult hitResult = pLevel.clip(new ClipContext(
@@ -50,13 +57,6 @@ public class VoidburstSpyglassItem extends SpyglassItem {
                     hitResult.getBlockPos().getY() + 1,
                     hitResult.getBlockPos().getZ() + 0.5
             );
-
-            System.out.println(hitResult.getBlockPos());
-
-            if (pLivingEntity instanceof Player) {
-                System.out.println("used");
-                ((Player)pLivingEntity).getCooldowns().addCooldown(this, 200);
-            }
         }
     }
 }

@@ -1,10 +1,12 @@
 package net.eclipixie.chorusmod.util;
 
+import net.eclipixie.chorusmod.mobeffects.ModMobEffects;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Fox;
 import net.minecraft.world.entity.player.Player;
@@ -15,6 +17,8 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.EntityTeleportEvent;
 
 public class Teleports {
+    public static int voidburstInstabilityDuration = 5;
+
     public static void RandomTeleport(Level pLevel, LivingEntity pEntityLiving, double range) {
         double d0 = pEntityLiving.getX();
         double d1 = pEntityLiving.getY();
@@ -49,6 +53,7 @@ public class Teleports {
     }
 
     public static void VoidburstTeleport(Level pLevel, LivingEntity pLivingEntity, Vec3 pos) {
+        System.out.println("voidburst");
         if (pLivingEntity.isPassenger()) {
             pLivingEntity.stopRiding();
         }
@@ -74,6 +79,19 @@ public class Teleports {
                 5.0f, false,
                 Level.ExplosionInteraction.NONE
         );
+
+        if (pLivingEntity.getEffect(ModMobEffects.VOID_INSTABILITY.get()) != null) {
+            int amplifier = pLivingEntity.getEffect(ModMobEffects.VOID_INSTABILITY.get()).getAmplifier();
+
+            pLivingEntity.addEffect(new MobEffectInstance(
+                    ModMobEffects.VOID_INSTABILITY.get(),
+                    voidburstInstabilityDuration * 20, amplifier + 1));
+        }
+        else {
+            pLivingEntity.addEffect(new MobEffectInstance(
+                    ModMobEffects.VOID_INSTABILITY.get(),
+                    voidburstInstabilityDuration * 20, 0));
+        }
     }
 
     public static void VoidburstTeleport(Level pLevel, LivingEntity pLivingEntity, double x, double y, double z) {
