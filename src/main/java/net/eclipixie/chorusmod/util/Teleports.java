@@ -58,9 +58,22 @@ public class Teleports {
         if (event.isCanceled()) { return; }
 
         pLivingEntity.teleportTo(pos.x, pos.y, pos.z);
-        SoundEvent soundevent = SoundEvents.ENDERMAN_TELEPORT;
-        pLevel.playSound((Player)null, pos.x, pos.y, pos.z, soundevent, SoundSource.PLAYERS, 1.0F, 1.0F);
-        pLivingEntity.playSound(soundevent, 1.0F, 1.0F);
+//        SoundEvent soundevent = SoundEvents.ENDERMAN_TELEPORT;
+//
+//        pLevel.playSound(
+//                pLivingEntity,
+//                new BlockPos((int) pos.x, (int) pos.y, (int) pos.z),
+//                soundevent,
+//                SoundSource.NEUTRAL,
+//                5.0f, 1.0f
+//        );
+
+        pLevel.explode(
+                pLivingEntity,
+                pos.x, pos.y, pos.z,
+                5.0f, false,
+                Level.ExplosionInteraction.NONE
+        );
     }
 
     public static void VoidburstTeleport(Level pLevel, LivingEntity pLivingEntity, double x, double y, double z) {
