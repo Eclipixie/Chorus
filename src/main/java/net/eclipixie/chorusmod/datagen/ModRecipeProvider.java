@@ -8,7 +8,6 @@ import net.minecraft.data.recipes.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
@@ -19,36 +18,13 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class ModRecipeProvider extends RecipeProvider implements IConditionBuilder {
-    private static final List<ItemLike> SAPPHIRE_SMELTABLES = List.of(
-            ModItems.RAW_SAPPHIRE.get(),
-            ModBlocks.SAPPHIRE_ORE.get(),
-            ModBlocks.DEEPSLATE_SAPPHIRE_ORE.get(),
-            ModBlocks.NETHER_SAPPHIRE_ORE.get(),
-            ModBlocks.END_SAPPHIRE_ORE.get()
-    );
     public ModRecipeProvider(PackOutput pOutput) {
         super(pOutput);
     }
 
     @Override
     protected void buildRecipes(Consumer<FinishedRecipe> consumer) {
-        oreSmelting(consumer, SAPPHIRE_SMELTABLES, RecipeCategory.MISC, ModItems.SAPPHIRE.get(), .25f, 200, "sapphire");
-        oreBlasting(consumer, SAPPHIRE_SMELTABLES, RecipeCategory.MISC, ModItems.SAPPHIRE.get(), .25f, 100, "sapphire");
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.SAPPHIRE_BLOCK.get())
-                .pattern("sss")
-                .pattern("sss")
-                .pattern("sss")
-                .define('s', ModItems.SAPPHIRE.get())
-                .unlockedBy(getHasName(ModItems.SAPPHIRE.get()), has(ModItems.SAPPHIRE.get()))
-                .save(consumer);
-
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.SAPPHIRE.get(), 9)
-                .requires(ModBlocks.SAPPHIRE_BLOCK.get())
-                .unlockedBy(getHasName(ModBlocks.SAPPHIRE_BLOCK.get()), has(ModBlocks.SAPPHIRE_BLOCK.get()))
-                .save(consumer);
-
-        //nineBlock(ModItems.SAPPHIRE.get(), ModBlocks.SAPPHIRE_BLOCK.get(), consumer);
+        
     }
 
     protected static void nineBlock(Item smaller, Block larger, Consumer<FinishedRecipe> consumer) {

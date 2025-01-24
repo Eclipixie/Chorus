@@ -12,7 +12,6 @@ import net.minecraft.world.item.armortrim.TrimMaterial;
 import net.minecraft.world.item.armortrim.TrimMaterials;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
-import net.minecraftforge.client.model.generators.ModelBuilder;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
@@ -40,25 +39,6 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        simpleItem(ModItems.SAPPHIRE, "generated");
-        simpleItem(ModItems.RAW_SAPPHIRE, "generated");
-
-        trimmedArmorItem(ModItems.SAPPHIRE_HELMET);
-        trimmedArmorItem(ModItems.SAPPHIRE_CHESTPLATE);
-        trimmedArmorItem(ModItems.SAPPHIRE_LEGGINGS);
-        trimmedArmorItem(ModItems.SAPPHIRE_BOOTS);
-
-        simpleItem(ModItems.SAPPHIRE_SWORD, "handheld");
-        simpleItem(ModItems.SAPPHIRE_PICKAXE, "handheld");
-        simpleItem(ModItems.SAPPHIRE_AXE, "handheld");
-        simpleItem(ModItems.SAPPHIRE_SHOVEL, "handheld");
-        simpleItem(ModItems.SAPPHIRE_HOE, "handheld");
-
-        simpleItem(ModItems.METAL_DETECTOR, "generated");
-        simpleItem(ModItems.DIGERIDOO, "generated");
-
-        simpleItem(ModItems.STRAWBERRY, "generated");
-
         simpleItem(ModItems.ENDER_SHARD, "generated");
     }
 

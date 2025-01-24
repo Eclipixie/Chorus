@@ -16,16 +16,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        blockWithItem(ModBlocks.RAW_SAPPHIRE_BLOCK);
-        blockWithItem(ModBlocks.SAPPHIRE_BLOCK);
-
-        blockWithItem(ModBlocks.SOUND_BLOCK);
-
-        blockWithItem(ModBlocks.DEEPSLATE_SAPPHIRE_ORE);
-        blockWithItem(ModBlocks.END_SAPPHIRE_ORE);
-        blockWithItem(ModBlocks.NETHER_SAPPHIRE_ORE);
-        blockWithItem(ModBlocks.SAPPHIRE_ORE);
-
         blockWithRenderType(ModBlocks.VOIDGLASS.get(), "voidglass", "translucent");
     }
 

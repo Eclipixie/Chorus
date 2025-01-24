@@ -21,13 +21,6 @@ public class ModItemTagGenerator extends ItemTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
-        this.tag(ItemTags.TRIMMABLE_ARMOR).add(
-                ModItems.SAPPHIRE_HELMET.get(),
-                ModItems.SAPPHIRE_CHESTPLATE.get(),
-                ModItems.SAPPHIRE_LEGGINGS.get(),
-                ModItems.SAPPHIRE_BOOTS.get()
-        );
-
         this.tag(ModTags.Items.IS_SPYGLASS).add(
                 Items.SPYGLASS,
                 ModItems.SOUNDSIGHT_SPYGLASS.get(),
