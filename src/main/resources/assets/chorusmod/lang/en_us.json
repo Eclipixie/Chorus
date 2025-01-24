@@ -1,9 +1,4 @@
 {
-  "item.chorusmod.sapphire": "Sapphire",
-  "item.chorusmod.raw_sapphire": "Raw Sapphire",
-  "item.chorusmod.metal_detector": "Metal Detector",
-  "item.chorusmod.digeridoo": "Digeridoo",
-
   "effect.chorusmod.void_instability": "Void Instability",
 
   "item.chorusmod.voidburst_spyglass": "Voidburst Spyglass",
@@ -12,31 +7,5 @@
 
   "block.chorusmod.voidglass": "Voidglass",
 
-  "item.chorusmod.sapphire_sword": "Sapphire Sword",
-  "item.chorusmod.sapphire_pickaxe": "Sapphire Pickaxe",
-  "item.chorusmod.sapphire_axe": "Sapphire Axe",
-  "item.chorusmod.sapphire_shovel": "Sapphire Shovel",
-  "item.chorusmod.sapphire_hoe": "Sapphire Hoe",
-
-  "item.chorusmod.sapphire_helmet": "Sapphire Helmet",
-  "item.chorusmod.sapphire_chestplate":"Sapphire Chestplate",
-  "item.chorusmod.sapphire_leggings": "Sapphire Leggings",
-  "item.chorusmod.sapphire_boots":"Sapphire Boots",
-
-  "block.chorusmod.sapphire_block": "Sapphire Block",
-  "block.chorusmod.raw_sapphire_block": "Raw Sapphire Block",
-
-  "item.chorusmod.strawberry": "Strawberry",
-
-  "block.chorusmod.sapphire_ore": "Sapphire Ore",
-  "block.chorusmod.deepslate_sapphire_ore": "Deepslate Sapphire Ore",
-  "block.chorusmod.nether_sapphire_ore": "Nether Sapphire Ore",
-  "block.chorusmod.end_sapphire_ore": "End Sapphire Ore",
-
-  "block.chorusmod.sound_block": "Sound Block",
-
-  "creativetab.chorus_tab": "Chorus",
-
-  "tooltip.chorusmod.metal_detector.tooltip": "Finds Iron Ore",
-  "tooltip.chorusmod.sound_block.tooltip": "Play a noise"
+  "creativetab.chorus_tab": "Chorus"
 }
