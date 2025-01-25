@@ -40,6 +40,9 @@ public class ModItemModelProvider extends ItemModelProvider {
     @Override
     protected void registerModels() {
         simpleItem(ModItems.ENDER_SHARD, "generated");
+
+        withExistingParent("sculk_corrupted_enderman", new ResourceLocation("item/generated"))
+                .texture("layer0", new ResourceLocation("chorusmod", "item/sculk_corrupted_enderman"));
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item, String type) {
