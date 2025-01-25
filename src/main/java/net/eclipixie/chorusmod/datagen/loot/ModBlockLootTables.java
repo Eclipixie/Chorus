@@ -1,7 +1,6 @@
 package net.eclipixie.chorusmod.datagen.loot;
 
 import net.eclipixie.chorusmod.block.ModBlocks;
-import net.eclipixie.chorusmod.item.ModItems;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
@@ -29,6 +28,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
 //                block -> createOreDrops(ModBlocks.SAPPHIRE_ORE.get(), ModItems.RAW_SAPPHIRE.get(), 2, 5, true));
 
         this.dropWhenSilkTouch(ModBlocks.VOIDGLASS.get());
+        this.dropSelf(ModBlocks.SCULK_CORRUPTED_ENDERMAN.get());
     }
 
     protected LootTable.Builder createOreDrops(Block pBlock, Item item, int min, int max, boolean fortune) {

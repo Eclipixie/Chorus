@@ -1,0 +1,142 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"1": "chorusmod:block/sculk_corrupted_enderman_2d",
+		"particle": "chorusmod:block/sculk_corrupted_enderman_2d"
+	},
+	"elements": [
+		{
+			"name": "Base",
+			"from": [0, 0, 0],
+			"to": [16, 3, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, -1, 8]},
+			"faces": {
+				"north": {"uv": [4, 14, 8, 14.75], "texture": "#1"},
+				"east": {"uv": [0, 14, 4, 14.75], "texture": "#1"},
+				"south": {"uv": [12, 14, 16, 14.75], "texture": "#1"},
+				"west": {"uv": [8, 14, 12, 14.75], "texture": "#1"},
+				"up": {"uv": [8, 14, 4, 10], "texture": "#1"},
+				"down": {"uv": [12, 10, 8, 14], "texture": "#1"}
+			}
+		},
+		{
+			"name": "LeftLeg",
+			"from": [1.5, 1, 11],
+			"to": [7.5, 8, 17],
+			"rotation": {"angle": 0, "axis": "y", "origin": [4.5, 0, 14]},
+			"faces": {
+				"north": {"uv": [11.5, 4.25, 13, 6], "texture": "#1"},
+				"east": {"uv": [10, 4.25, 11.5, 6], "texture": "#1"},
+				"south": {"uv": [14.5, 4.25, 16, 6], "texture": "#1"},
+				"west": {"uv": [13, 4.25, 14.5, 6], "texture": "#1"},
+				"up": {"uv": [13, 4.25, 11.5, 2.75], "texture": "#1"},
+				"down": {"uv": [14.5, 2.75, 13, 4.25], "texture": "#1"}
+			}
+		},
+		{
+			"name": "RightLeg",
+			"from": [8.5, 1, 11],
+			"to": [14.5, 8, 17],
+			"rotation": {"angle": 0, "axis": "y", "origin": [11.5, 0, 14]},
+			"faces": {
+				"north": {"uv": [11.5, 4.25, 13, 6], "texture": "#1"},
+				"east": {"uv": [10, 4.25, 11.5, 6], "texture": "#1"},
+				"south": {"uv": [14.5, 4.25, 16, 6], "texture": "#1"},
+				"west": {"uv": [13, 4.25, 14.5, 6], "texture": "#1"},
+				"up": {"uv": [13, 4.25, 11.5, 2.75], "texture": "#1"},
+				"down": {"uv": [14.5, 2.75, 13, 4.25], "texture": "#1"}
+			}
+		},
+		{
+			"name": "LeftLegBind",
+			"from": [0, 3, 3],
+			"to": [6, 8, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [3, 0, 6]},
+			"faces": {
+				"north": {"uv": [11.5, 4.25, 13, 5.5], "texture": "#1"},
+				"east": {"uv": [10, 4.25, 11.5, 5.5], "texture": "#1"},
+				"south": {"uv": [14.5, 4.25, 16, 5.5], "texture": "#1"},
+				"west": {"uv": [13, 4.25, 14.5, 5.5], "texture": "#1"},
+				"up": {"uv": [13, 4.25, 11.5, 2.75], "texture": "#1"},
+				"down": {"uv": [14.5, 2.75, 13, 4.25], "texture": "#1"}
+			}
+		},
+		{
+			"name": "LeftArmSheath",
+			"from": [1, 8, 4],
+			"to": [5, 15, 8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2, 8, 5]},
+			"faces": {
+				"north": {"uv": [11, 1, 12, 2.75], "texture": "#1"},
+				"east": {"uv": [10, 1, 11, 2.75], "texture": "#1"},
+				"south": {"uv": [13, 1, 14, 2.75], "texture": "#1"},
+				"west": {"uv": [12, 1, 13, 2.75], "texture": "#1"},
+				"up": {"uv": [12, 1, 11, 0], "texture": "#1"},
+				"down": {"uv": [13, 0, 12, 1], "texture": "#1"}
+			}
+		},
+		{
+			"name": "LeftLegBind",
+			"from": [10, 3, 3],
+			"to": [16, 8, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [13, 0, 6]},
+			"faces": {
+				"north": {"uv": [11.5, 4.25, 13, 5.5], "texture": "#1"},
+				"east": {"uv": [10, 4.25, 11.5, 5.5], "texture": "#1"},
+				"south": {"uv": [14.5, 4.25, 16, 5.5], "texture": "#1"},
+				"west": {"uv": [13, 4.25, 14.5, 5.5], "texture": "#1"},
+				"up": {"uv": [13, 4.25, 11.5, 2.75], "texture": "#1"},
+				"down": {"uv": [14.5, 2.75, 13, 4.25], "texture": "#1"}
+			}
+		},
+		{
+			"name": "LeftArmSheath",
+			"from": [11, 8, 4],
+			"to": [15, 15, 8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [12, 8, 5]},
+			"faces": {
+				"north": {"uv": [11, 1, 12, 2.75], "texture": "#1"},
+				"east": {"uv": [10, 1, 11, 2.75], "texture": "#1"},
+				"south": {"uv": [13, 1, 14, 2.75], "texture": "#1"},
+				"west": {"uv": [12, 1, 13, 2.75], "texture": "#1"},
+				"up": {"uv": [12, 1, 11, 0], "texture": "#1"},
+				"down": {"uv": [13, 0, 12, 1], "texture": "#1"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "Roots",
+			"origin": [8, 0, 8],
+			"color": 0,
+			"children": [
+				0,
+				{
+					"name": "LeftLegCorr",
+					"origin": [8, 0, 8],
+					"color": 0,
+					"children": [1]
+				},
+				{
+					"name": "RightLegCorr",
+					"origin": [8, 0, 8],
+					"color": 0,
+					"children": [2]
+				},
+				{
+					"name": "LeftArmCorr",
+					"origin": [8, 0, 8],
+					"color": 0,
+					"children": [3, 4]
+				},
+				{
+					"name": "RightArmCorr",
+					"origin": [18, 0, 8],
+					"color": 0,
+					"children": [5, 6]
+				}
+			]
+		}
+	]
+}

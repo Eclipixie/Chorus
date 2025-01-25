@@ -7,5 +7,8 @@
 
   "block.chorusmod.voidglass": "Voidglass",
 
+  "block.chorusmod.sculk_corrupted_enderman": "Sculk Corrupted Enderman",
+  "block.chorusmod.sculk_corrupted_enderman_top": "Sculk Corrupted Enderman",
+
   "creativetab.chorus_tab": "Chorus"
 }

@@ -1,6 +1,7 @@
 package net.eclipixie.chorusmod.block;
 
 import net.eclipixie.chorusmod.ChorusMod;
+import net.eclipixie.chorusmod.block.custom.SculkCorruptedEndermanBlock;
 import net.eclipixie.chorusmod.block.custom.VoidglassBlock;
 import net.eclipixie.chorusmod.item.ModItems;
 import net.minecraft.world.item.BlockItem;
@@ -21,6 +22,8 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> VOIDGLASS = registerBlock("voidglass",
             () -> new VoidglassBlock(BlockBehaviour.Properties.copy(Blocks.GLASS).noOcclusion()));
+    public static final RegistryObject<Block> SCULK_CORRUPTED_ENDERMAN = registerBlock("sculk_corrupted_enderman",
+            () -> new SculkCorruptedEndermanBlock(BlockBehaviour.Properties.copy(Blocks.LECTERN).noOcclusion()));
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);

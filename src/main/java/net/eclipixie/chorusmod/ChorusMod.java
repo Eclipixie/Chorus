@@ -2,6 +2,7 @@ package net.eclipixie.chorusmod;
 
 import com.mojang.logging.LogUtils;
 import net.eclipixie.chorusmod.block.ModBlocks;
+import net.eclipixie.chorusmod.events.BlockEvents;
 import net.eclipixie.chorusmod.item.ModCreativeModeTabs;
 import net.eclipixie.chorusmod.item.ModItems;
 import net.eclipixie.chorusmod.mobeffects.ModMobEffects;
@@ -27,6 +28,7 @@ public class ChorusMod {
     public static final String MOD_ID = "chorusmod";
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
+
     public ChorusMod() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
@@ -35,6 +37,8 @@ public class ChorusMod {
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModMobEffects.register(modEventBus);
+
+        BlockEvents.register(MinecraftForge.EVENT_BUS);
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
