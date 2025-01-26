@@ -28,9 +28,18 @@ public class ModBlockStateProvider extends BlockStateProvider {
                             "sculk_corrupted_enderman_top_3d" :
                             "sculk_corrupted_enderman_3d";
 
+                    ModelFile model = models().withExistingParent(
+                            modelName+"_data", modLoc("block/" + modelName))
+                            .texture("all", modLoc("block/sculk_corrupted_enderman_2d"))
+                            .renderType("cutout");
+
                     return ConfiguredModel.builder()
-                            .modelFile(models().getExistingFile(modLoc("block/" + modelName)))
+                            .modelFile(model)
                             .build();
+
+//                    return ConfiguredModel.builder()
+//                            .modelFile(models().getExistingFile(modLoc("block/" + modelName)))
+//                            .build();
                 });
     }
 
