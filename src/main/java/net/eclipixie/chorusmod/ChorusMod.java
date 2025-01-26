@@ -3,7 +3,7 @@ package net.eclipixie.chorusmod;
 import com.mojang.logging.LogUtils;
 import net.eclipixie.chorusmod.block.ModBlocks;
 import net.eclipixie.chorusmod.block.entity.ModBlockEntities;
-import net.eclipixie.chorusmod.events.BlockEvents;
+import net.eclipixie.chorusmod.event.BlockEvents;
 import net.eclipixie.chorusmod.item.ModCreativeModeTabs;
 import net.eclipixie.chorusmod.item.ModItems;
 import net.eclipixie.chorusmod.mobeffects.ModMobEffects;

@@ -1,4 +1,4 @@
-package net.eclipixie.chorusmod.events;
+package net.eclipixie.chorusmod.event;
 
 import net.eclipixie.chorusmod.block.ModBlocks;
 import net.eclipixie.chorusmod.block.custom.SculkCorruptedEndermanBlock;

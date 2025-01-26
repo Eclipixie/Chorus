@@ -8,10 +8,12 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -35,10 +37,18 @@ public class SculkCorruptedEndermanBlock extends BaseEntityBlock {
         super.createBlockStateDefinition(pBuilder);
     }
 
+    public boolean propagatesSkylightDown(BlockState pState, BlockGetter pReader, BlockPos pPos) {
+        return true;
+    }
+
+    @Override
+    public RenderShape getRenderShape(BlockState pState) {
+        return RenderShape.MODEL;
+    }
+
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        System.out.println("placing");
         BlockPos placingPos = pContext.getClickedPos();
 
         BlockState placingBelow = pContext.getLevel().getBlockState(placingPos.below());
@@ -46,8 +56,6 @@ public class SculkCorruptedEndermanBlock extends BaseEntityBlock {
         boolean isTop = placingBelow.is(ModBlocks.SCULK_CORRUPTED_ENDERMAN.get()) && placingBelow.getValue(IS_TOP);
 
         BlockState blockState = super.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection());
-
-        System.out.println(pContext.getHorizontalDirection());
 
         if (isTop) {
             return blockState.setValue(IS_TOP, true);
@@ -81,6 +89,9 @@ public class SculkCorruptedEndermanBlock extends BaseEntityBlock {
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (!pLevel.isClientSide()) {
+            if (pState.getValue(IS_TOP))
+                pPos = pPos.below();
+            
             BlockEntity entity = pLevel.getBlockEntity(pPos);
 
             if (entity instanceof SculkCorruptedEndermanBlockEntity) {

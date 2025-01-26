@@ -43,7 +43,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
                             .modelFile(models().withExistingParent(
                                     modelName + "_data", modLoc("block/" + modelName))
                                     .texture("all", modLoc("block/sculk_corrupted_enderman_2d"))
-//                                    .renderType("cutout")
+                                    .renderType("cutout")
                             )
                             .rotationY(y)
                             .build();
