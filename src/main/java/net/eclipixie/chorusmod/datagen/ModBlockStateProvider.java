@@ -3,6 +3,7 @@ package net.eclipixie.chorusmod.datagen;
 import net.eclipixie.chorusmod.ChorusMod;
 import net.eclipixie.chorusmod.block.ModBlocks;
 import net.eclipixie.chorusmod.block.custom.SculkCorruptedEndermanBlock;
+import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
@@ -28,18 +29,24 @@ public class ModBlockStateProvider extends BlockStateProvider {
                             "sculk_corrupted_enderman_top_3d" :
                             "sculk_corrupted_enderman_3d";
 
-                    ModelFile model = models().withExistingParent(
-                            modelName+"_data", modLoc("block/" + modelName))
-                            .texture("all", modLoc("block/sculk_corrupted_enderman_2d"))
-                            .renderType("cutout");
+                    Direction facing = state.getValue(SculkCorruptedEndermanBlock.FACING);
+                    int y = 0;
+
+                    switch (facing) {
+                        case NORTH -> y = 180;
+                        case EAST ->  y = 270;
+                        case SOUTH -> y =   0;
+                        case WEST ->  y =  90;
+                    }
 
                     return ConfiguredModel.builder()
-                            .modelFile(model)
+                            .modelFile(models().withExistingParent(
+                                    modelName + "_data", modLoc("block/" + modelName))
+                                    .texture("all", modLoc("block/sculk_corrupted_enderman_2d"))
+                                    .renderType("cutout")
+                            )
+                            .rotationY(y)
                             .build();
-
-//                    return ConfiguredModel.builder()
-//                            .modelFile(models().getExistingFile(modLoc("block/" + modelName)))
-//                            .build();
                 });
     }
 

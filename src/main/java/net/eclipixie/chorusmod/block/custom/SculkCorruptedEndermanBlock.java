@@ -36,17 +36,20 @@ public class SculkCorruptedEndermanBlock extends Block {
 
         boolean isTop = placingBelow.is(ModBlocks.SCULK_CORRUPTED_ENDERMAN.get()) && placingBelow.getValue(IS_TOP);
 
+        BlockState blockState = super.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection());
+
+        System.out.println(pContext.getHorizontalDirection());
+
         if (isTop) {
-            return super.defaultBlockState().setValue(IS_TOP, true);
+            return blockState.setValue(IS_TOP, true);
         }
         else {
             boolean placeable = pContext.getLevel().isEmptyBlock(placingPos.above());
-            System.out.println(placeable);
 
             if (placeable) {
                 pContext.getLevel().setBlock(placingPos.above(),
-                        this.defaultBlockState().setValue(IS_TOP, true), 3);
-                return this.defaultBlockState().setValue(IS_TOP, false);
+                        blockState.setValue(IS_TOP, true), 3);
+                return blockState.setValue(IS_TOP, false);
             }
         }
 
