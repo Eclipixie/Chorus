@@ -1,20 +1,18 @@
 package net.eclipixie.chorusmod.block.entity;
 
+import net.eclipixie.chorusmod.block.custom.SculkCorruptedEndermanBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.Containers;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.*;
+import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.DropperBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -23,19 +21,23 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
-public class SculkCorruptedEndermanBlockEntity extends BlockEntity {
+import java.util.List;
+
+public class SculkCorruptedEndermanBlockEntity extends BlockEntity implements Container {
     private final ItemStackHandler itemStackHandler = new ItemStackHandler(1);
 
-    public static final float PLAYER_RANGE = 1.0f;
-    public static final float XP_ORB_RANGE = 5.0f;
-    public static final float DEATH_RANGE = 5.0f;
+    public static final float PLAYER_RANGE = 2.0f;
+    public static final float XP_ORB_RANGE = 7.0f;
+
+    public static final int XP_DRAIN_RATE = 5;
+    public static final int XP_DRAIN_DELAY = 5;
 
     private static final int OUTPUT_SLOT = 0;
 
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
     protected final ContainerData containerData;
-    private int progressRequirement = 100;
+    private int progressRequirement = 70;
     private int progress;
 
     public SculkCorruptedEndermanBlockEntity(BlockPos pPos, BlockState pBlockState) {
@@ -130,8 +132,113 @@ public class SculkCorruptedEndermanBlockEntity extends BlockEntity {
         return InteractionResult.PASS;
     }
 
-    public void tick(Level pLevel, BlockPos pPos, BlockState pState) {
+    public void tick(Level pLevel, BlockPos pPos, BlockState pState, SculkCorruptedEndermanBlockEntity entity) {
+        if (pState.getValue(SculkCorruptedEndermanBlock.IS_TOP))
+            return;
+
         // ticking logic
         // so basically checking for nearby players/xp orbs
+
+        if (pLevel.getGameTime() % XP_DRAIN_DELAY == 0) {
+            AABB orbBoundArea = AABB.ofSize(pPos.getCenter(), XP_ORB_RANGE, XP_ORB_RANGE, XP_ORB_RANGE);
+            AABB playerBoundArea = AABB.ofSize(pPos.getCenter(), PLAYER_RANGE, PLAYER_RANGE, PLAYER_RANGE);
+
+            List<ExperienceOrb> orbs = pLevel.getEntitiesOfClass(ExperienceOrb.class, orbBoundArea);
+            List<Player> players = pLevel.getEntitiesOfClass(Player.class, playerBoundArea);
+
+            for (ExperienceOrb orb : orbs) {
+                int xp = Math.min(orb.getValue(), XP_DRAIN_RATE);
+
+                entity.progress += xp;
+                orb.value = orb.getValue() - xp;
+
+                if (orb.value <= 0)
+                    orb.kill();
+            }
+
+            for (Player player : players) {
+                if (player.totalExperience > 0) {
+                    int xp = Math.min(player.totalExperience, XP_DRAIN_RATE);
+
+                    entity.progress += xp;
+                    player.totalExperience -= xp;
+                }
+            }
+        }
+
+        ItemStack outputStack = entity.itemStackHandler.getStackInSlot(OUTPUT_SLOT);
+
+        if (progress >= progressRequirement && outputStack.getCount() < outputStack.getItem().getMaxStackSize(outputStack)) {
+            if (outputStack.isEmpty())
+                outputStack = new ItemStack(Items.ENDER_PEARL, 1);
+            else
+                outputStack.setCount(outputStack.getCount() + 1);
+
+            entity.itemStackHandler.setStackInSlot(OUTPUT_SLOT, outputStack);
+            progress -= progressRequirement;
+        }
+    }
+
+    @Override
+    public int getContainerSize() {
+        return itemStackHandler.getSlots();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        for (int i = 0; i < itemStackHandler.getSlots(); i++) {
+            if (!itemStackHandler.getStackInSlot(i).isEmpty())
+                return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public ItemStack getItem(int pSlot) {
+        return itemStackHandler.getStackInSlot(pSlot);
+    }
+
+    @Override
+    public ItemStack removeItem(int pSlot, int pAmount) {
+        ItemStack stack = itemStackHandler.getStackInSlot(pSlot);
+        int remaining = Math.max(stack.getCount() - pAmount, 0);
+
+        ItemStack newStack = new ItemStack(
+                stack.getItem(),
+                stack.getCount() - remaining);
+
+        stack.setCount(remaining);
+        if (stack.getCount() == 0)
+            stack = ItemStack.EMPTY;
+
+        itemStackHandler.setStackInSlot(pSlot, stack);
+
+        return newStack;
+    }
+
+    @Override
+    public ItemStack removeItemNoUpdate(int pSlot) {
+        ItemStack stack = itemStackHandler.getStackInSlot(pSlot);
+
+        itemStackHandler.setStackInSlot(pSlot, ItemStack.EMPTY);
+
+        return stack;
+    }
+
+    @Override
+    public void setItem(int pSlot, ItemStack pStack) {
+        itemStackHandler.setStackInSlot(pSlot, pStack);
+    }
+
+    public boolean stillValid(Player pPlayer) {
+        return Container.stillValidBlockEntity(this, pPlayer);
+    }
+
+    @Override
+    public void clearContent() {
+        for (int i = 0; i < itemStackHandler.getSlots(); i++) {
+            itemStackHandler.setStackInSlot(i, ItemStack.EMPTY);
+        }
     }
 }

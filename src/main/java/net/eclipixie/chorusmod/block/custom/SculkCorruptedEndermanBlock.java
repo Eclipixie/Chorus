@@ -117,6 +117,6 @@ public class SculkCorruptedEndermanBlock extends BaseEntityBlock {
         return createTickerHelper(
                 pBlockEntityType,
                 ModBlockEntities.SCULK_CORRUPTED_ENDERMAN_ENTITY.get(),
-                (pLevel1, pPos, pState1, pBlockEntity) -> pBlockEntity.tick(pLevel1, pPos, pState1));
+                (pLevel1, pPos, pState1, pBlockEntity) -> pBlockEntity.tick(pLevel1, pPos, pState1, pBlockEntity));
     }
 }
