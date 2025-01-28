@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.eclipixie.chorusmod.block.ModBlocks;
 import net.eclipixie.chorusmod.block.entity.ModBlockEntities;
 import net.eclipixie.chorusmod.event.BlockEvents;
+import net.eclipixie.chorusmod.event.EntityEvents;
 import net.eclipixie.chorusmod.item.ModCreativeModeTabs;
 import net.eclipixie.chorusmod.item.ModItems;
 import net.eclipixie.chorusmod.mobeffects.ModMobEffects;
@@ -41,6 +42,7 @@ public class ChorusMod {
         ModMobEffects.register(modEventBus);
 
         BlockEvents.register(MinecraftForge.EVENT_BUS);
+        EntityEvents.register(MinecraftForge.EVENT_BUS);
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
