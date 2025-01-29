@@ -3,11 +3,16 @@ package net.eclipixie.chorusmod;
 import com.mojang.logging.LogUtils;
 import net.eclipixie.chorusmod.block.ModBlocks;
 import net.eclipixie.chorusmod.block.entity.ModBlockEntities;
+import net.eclipixie.chorusmod.entity.ModEntities;
+import net.eclipixie.chorusmod.entity.client.PearlBombEntityRenderer;
+import net.eclipixie.chorusmod.entity.custom.PearlBombEntity;
 import net.eclipixie.chorusmod.event.BlockEvents;
 import net.eclipixie.chorusmod.event.EntityEvents;
 import net.eclipixie.chorusmod.item.ModCreativeModeTabs;
 import net.eclipixie.chorusmod.item.ModItems;
 import net.eclipixie.chorusmod.mobeffects.ModMobEffects;
+import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -39,6 +44,7 @@ public class ChorusMod {
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModBlockEntities.register(modEventBus);
+        ModEntities.register(modEventBus);
         ModMobEffects.register(modEventBus);
 
         BlockEvents.register(MinecraftForge.EVENT_BUS);
@@ -64,7 +70,6 @@ public class ChorusMod {
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
-//            event.accept(ModItems.RAW_SAPPHIRE);
         }
     }
 
@@ -79,7 +84,9 @@ public class ChorusMod {
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-
+            EntityRenderers.register(
+                    ModEntities.PEARL_BOMB.get(),
+                    PearlBombEntityRenderer::new);
         }
     }
 }
