@@ -96,11 +96,21 @@ repositories {
     // flatDir {
     //     dir 'libs'
     // }
+
+    maven {
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     implementation "org.spongepowered:mixin:0.8.5"
+
+    // compile against the JEI API but do not include it at runtime
+    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
+    // at runtime, use the full JEI jar for Forge
+    runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
