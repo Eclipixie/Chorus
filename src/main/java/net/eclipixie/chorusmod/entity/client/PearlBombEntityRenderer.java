@@ -13,7 +13,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import org.joml.Quaternionf;
 
 public class PearlBombEntityRenderer extends EntityRenderer<PearlBombEntity> {
     public PearlBombEntityRenderer(EntityRendererProvider.Context pContext) {

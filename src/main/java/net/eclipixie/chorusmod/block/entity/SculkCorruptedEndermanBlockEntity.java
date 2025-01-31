@@ -29,7 +29,7 @@ public class SculkCorruptedEndermanBlockEntity extends BlockEntity implements Co
     public static final float PLAYER_RANGE = 2.0f;
     public static final float XP_ORB_RANGE = 7.0f;
 
-    public static final int XP_DRAIN_RATE = 5;
+    public static final int XP_DRAIN_RATE = 50;
     public static final int XP_DRAIN_DELAY = 5;
 
     private static final int OUTPUT_SLOT = 0;
@@ -37,7 +37,7 @@ public class SculkCorruptedEndermanBlockEntity extends BlockEntity implements Co
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
     protected final ContainerData containerData;
-    private int progressRequirement = 70;
+    private int progressRequirement = 10;
     private int progress;
 
     public SculkCorruptedEndermanBlockEntity(BlockPos pPos, BlockState pBlockState) {
@@ -141,10 +141,9 @@ public class SculkCorruptedEndermanBlockEntity extends BlockEntity implements Co
 
         if (pLevel.getGameTime() % XP_DRAIN_DELAY == 0) {
             AABB orbBoundArea = AABB.ofSize(pPos.getCenter(), XP_ORB_RANGE, XP_ORB_RANGE, XP_ORB_RANGE);
-            AABB playerBoundArea = AABB.ofSize(pPos.getCenter(), PLAYER_RANGE, PLAYER_RANGE, PLAYER_RANGE);
 
             List<ExperienceOrb> orbs = pLevel.getEntitiesOfClass(ExperienceOrb.class, orbBoundArea);
-            List<Player> players = pLevel.getEntitiesOfClass(Player.class, playerBoundArea);
+            Player player = pLevel.getNearestPlayer(pPos.getX(), pPos.getY(), pPos.getZ(), PLAYER_RANGE, true);
 
             for (ExperienceOrb orb : orbs) {
                 int xp = Math.min(orb.getValue(), XP_DRAIN_RATE);
@@ -156,27 +155,28 @@ public class SculkCorruptedEndermanBlockEntity extends BlockEntity implements Co
                     orb.kill();
             }
 
-            for (Player player : players) {
-                if (player.totalExperience > 0) {
-                    int xp = Math.min(player.totalExperience, XP_DRAIN_RATE);
+            if (player != null && player.totalExperience > 0) {
+                int xp = Math.min(player.totalExperience, XP_DRAIN_RATE);
 
-                    entity.progress += xp;
-                    player.totalExperience -= xp;
-                }
+                entity.progress += xp;
+                player.giveExperiencePoints(-xp);
             }
         }
 
-        ItemStack outputStack = entity.itemStackHandler.getStackInSlot(OUTPUT_SLOT);
-
-        if (progress >= progressRequirement && outputStack.getCount() < outputStack.getItem().getMaxStackSize(outputStack)) {
-            if (outputStack.isEmpty())
-                outputStack = new ItemStack(Items.ENDER_PEARL, 1);
-            else
-                outputStack.setCount(outputStack.getCount() + 1);
-
-            entity.itemStackHandler.setStackInSlot(OUTPUT_SLOT, outputStack);
+        if (progress >= progressRequirement) {
+            completeRecipe();
             progress -= progressRequirement;
         }
+    }
+
+    private void completeRecipe() {
+        ItemStack outputStack = itemStackHandler.getStackInSlot(OUTPUT_SLOT);
+
+        if (!(outputStack.isEmpty() || outputStack.is(Items.ENDER_PEARL))) return;
+        if (!(outputStack.getCount() < outputStack.getMaxStackSize())) return;
+
+        itemStackHandler.setStackInSlot(OUTPUT_SLOT,
+                new ItemStack(Items.ENDER_PEARL, outputStack.getCount() + 1));
     }
 
     @Override

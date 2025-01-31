@@ -2,6 +2,7 @@ package net.eclipixie.chorusmod;
 
 import com.mojang.logging.LogUtils;
 import net.eclipixie.chorusmod.block.ModBlocks;
+import net.eclipixie.chorusmod.block.client.SculkCorruptedEndermanBlockRenderer;
 import net.eclipixie.chorusmod.block.entity.ModBlockEntities;
 import net.eclipixie.chorusmod.entity.ModEntities;
 import net.eclipixie.chorusmod.entity.client.PearlBombEntityRenderer;
@@ -11,6 +12,8 @@ import net.eclipixie.chorusmod.event.EntityEvents;
 import net.eclipixie.chorusmod.item.ModCreativeModeTabs;
 import net.eclipixie.chorusmod.item.ModItems;
 import net.eclipixie.chorusmod.mobeffects.ModMobEffects;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -87,6 +90,10 @@ public class ChorusMod {
             EntityRenderers.register(
                     ModEntities.PEARL_BOMB.get(),
                     PearlBombEntityRenderer::new);
+
+            BlockEntityRenderers.register(
+                    ModBlockEntities.SCULK_CORRUPTED_ENDERMAN_ENTITY.get(),
+                    SculkCorruptedEndermanBlockRenderer::new);
         }
     }
 }
