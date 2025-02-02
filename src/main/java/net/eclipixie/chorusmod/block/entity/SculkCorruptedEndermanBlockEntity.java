@@ -24,7 +24,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class SculkCorruptedEndermanBlockEntity extends BlockEntity implements Container {
-    private final ItemStackHandler itemStackHandler = new ItemStackHandler(1);
+    public final ItemStackHandler itemStackHandler = new ItemStackHandler(1) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            setChanged();
+            assert level != null;
+            if(!level.isClientSide()) {
+                level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
+            }
+        }
+    };
 
     private static final int OUTPUT_SLOT = 0;
 
@@ -192,10 +201,10 @@ public class SculkCorruptedEndermanBlockEntity extends BlockEntity implements Co
     public boolean isEmpty() {
         for (int i = 0; i < itemStackHandler.getSlots(); i++) {
             if (!itemStackHandler.getStackInSlot(i).isEmpty())
-                return true;
+                return false;
         }
 
-        return false;
+        return true;
     }
 
     @Override

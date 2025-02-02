@@ -31,6 +31,18 @@ public class SculkHarvesterBlock extends BaseEntityBlock {
     public RenderShape getRenderShape(BlockState pState) { return RenderShape.MODEL; }
 
     @Override
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
+        if (pState.getBlock() != pNewState.getBlock()) {
+            BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
+
+            if (blockEntity instanceof SculkHarvesterBlockEntity)
+                ((SculkHarvesterBlockEntity) blockEntity).drops();
+        }
+
+        super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
+    }
+
+    @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (pLevel.isClientSide()) return InteractionResult.sidedSuccess(!pLevel.isClientSide());
         System.out.println(pPlayer.getItemInHand(pHand).getItem());
@@ -38,7 +50,6 @@ public class SculkHarvesterBlock extends BaseEntityBlock {
         SculkHarvesterBlockEntity entity = (SculkHarvesterBlockEntity) pLevel.getBlockEntity(pPos);
 
         assert entity != null;
-        System.out.println("entering");
         return entity.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
     }
 

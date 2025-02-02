@@ -26,7 +26,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> SCULK_CORRUPTED_ENDERMAN = registerBlock("sculk_corrupted_enderman",
             () -> new SculkCorruptedEndermanBlock(BlockBehaviour.Properties.copy(Blocks.LECTERN).noOcclusion()));
     public static final RegistryObject<Block> SCULK_HARVESTER = registerBlock("sculk_harvester",
-            () -> new SculkHarvesterBlock(BlockBehaviour.Properties.copy(Blocks.LECTERN).noOcclusion()));
+            () -> new SculkHarvesterBlock(BlockBehaviour.Properties.copy(Blocks.SCULK_CATALYST).noOcclusion()));
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);

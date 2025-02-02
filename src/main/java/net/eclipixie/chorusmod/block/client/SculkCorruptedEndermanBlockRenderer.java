@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.eclipixie.chorusmod.block.custom.SculkCorruptedEndermanBlock;
 import net.eclipixie.chorusmod.block.entity.SculkCorruptedEndermanBlockEntity;
-import net.eclipixie.chorusmod.entity.custom.PearlBombEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -14,10 +13,9 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import org.joml.Vector3f;
 
 public class SculkCorruptedEndermanBlockRenderer implements BlockEntityRenderer<SculkCorruptedEndermanBlockEntity> {
-    public SculkCorruptedEndermanBlockRenderer(BlockEntityRendererProvider.Context context) { super(); }
+    public SculkCorruptedEndermanBlockRenderer(BlockEntityRendererProvider.Context context) { }
 
     @Override
     public void render(SculkCorruptedEndermanBlockEntity pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {

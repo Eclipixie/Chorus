@@ -1,9 +1,11 @@
 package net.eclipixie.chorusmod.block.entity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
@@ -11,22 +13,36 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.Stack;
 
-public class SculkHarvesterBlockEntity extends BlockEntity {
-    private final ItemStackHandler itemStackHandler = new ItemStackHandler(2);
+public class SculkHarvesterBlockEntity extends BlockEntity implements Container {
+    public final ItemStackHandler itemStackHandler = new ItemStackHandler(2) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            setChanged();
+            assert level != null;
+            if(!level.isClientSide())
+                level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
+        }
+    };
 
     public static final int INPUT_SLOT = 0;
     public static final int OUTPUT_SLOT = 1;
 
     private static final int HARVEST_DELAY = 10;
     private static final int HARVEST_RANGE = 7;
+
+    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
     protected final ContainerData containerData;
     private int progressRequirement = 5;
@@ -61,6 +77,63 @@ public class SculkHarvesterBlockEntity extends BlockEntity {
         };
     }
 
+    @Override
+    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap) {
+        if (cap == ForgeCapabilities.ITEM_HANDLER) {
+            return lazyItemHandler.cast();
+        }
+
+        return super.getCapability(cap);
+    }
+
+    @Override
+    public void onLoad() {
+        lazyItemHandler = LazyOptional.of(
+                () -> itemStackHandler
+        );
+        super.onLoad();
+    }
+
+    @Override
+    public void invalidateCaps() {
+        lazyItemHandler.invalidate();
+        super.invalidateCaps();
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag pTag) {
+        pTag.put("inventory", itemStackHandler.serializeNBT());
+        pTag.putInt("sculk_harvester.progress", progress);
+
+        super.saveAdditional(pTag);
+    }
+
+    @Override
+    public void load(CompoundTag pTag) {
+        itemStackHandler.deserializeNBT(pTag.getCompound("inventory"));
+        progress = pTag.getInt("sculk_harvester.progress");
+
+        super.load(pTag);
+    }
+
+    public void drops() {
+        SimpleContainer container = new SimpleContainer(itemStackHandler.getSlots());
+
+        for (int i = 0; i < itemStackHandler.getSlots(); i++) {
+            container.setItem(i, itemStackHandler.getStackInSlot(i));
+        }
+
+        Containers.dropContents(this.level, this.worldPosition, container);
+    }
+
+    public ItemStack getRenderInputStack() {
+        if(itemStackHandler.getStackInSlot(OUTPUT_SLOT).isEmpty()) {
+            return itemStackHandler.getStackInSlot(INPUT_SLOT);
+        } else {
+            return itemStackHandler.getStackInSlot(OUTPUT_SLOT);
+        }
+    }
+
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (pLevel.isClientSide()) return InteractionResult.sidedSuccess(!pLevel.isClientSide());
 
@@ -68,8 +141,6 @@ public class SculkHarvesterBlockEntity extends BlockEntity {
         ItemStack outputSlot = itemStackHandler.getStackInSlot(OUTPUT_SLOT);
 
         ItemStack handStack = pPlayer.getItemInHand(pHand);
-
-        System.out.println(inputSlot.getItem());
 
         if (handStack.is(Items.GLASS_BOTTLE)) { // if the player's holding an empty bottle
             int inputAmount = Math.min(handStack.getCount() + inputSlot.getCount(), handStack.getMaxStackSize());
@@ -89,9 +160,11 @@ public class SculkHarvesterBlockEntity extends BlockEntity {
 
     public void tick(Level pLevel, BlockPos pPos, BlockState pState, SculkHarvesterBlockEntity entity) {
         if (pLevel.isClientSide()) return; // quit if we're client side
-
         if (tendril.isEmpty()) { // add sculk block if tendril is empty
-            if (pLevel.getBlockState(pPos.below()).is(Blocks.SCULK)) tendril.push(pPos.below());
+            BlockPos newSculkBlock = getAdjacentSculkBlock(pPos, pLevel);
+
+            if (newSculkBlock != null) tendril.push(newSculkBlock);
+
             return;
         }
 
@@ -103,26 +176,17 @@ public class SculkHarvesterBlockEntity extends BlockEntity {
             }
         }
 
+        if (tendril.isEmpty()) return;
+
         BlockPos tendrilEnd = tendril.lastElement();
 
         boolean found = false;
 
         if (tendril.size() < HARVEST_RANGE) {
-            // scannable blocks
-            BlockPos[] positionCandidates = {
-                    tendrilEnd.above(), tendrilEnd.below(),
-                    tendrilEnd.north(), tendrilEnd.south(),
-                    tendrilEnd.east(),  tendrilEnd.west()
-            };
-
-            for (BlockPos positionCandidate : positionCandidates) {
-                // if it's a part of the tendril already, discard
-                if (tendril.contains(positionCandidate)) continue;
-                // if it's not sculk, discard
-                if (!pLevel.getBlockState(positionCandidate).is(Blocks.SCULK)) continue;
-
-                tendril.push(positionCandidate);
+            BlockPos newSculkBlock = getAdjacentSculkBlock(tendrilEnd, pLevel);
+            if (newSculkBlock != null) {
                 found = true;
+                tendril.push(newSculkBlock);
             }
         }
 
@@ -146,6 +210,29 @@ public class SculkHarvesterBlockEntity extends BlockEntity {
             completeCraft();
     }
 
+    protected @Nullable BlockPos getAdjacentSculkBlock(BlockPos pos, Level level) {
+        BlockPos found = null;
+
+        // scannable blocks
+        BlockPos[] positionCandidates = {
+                pos.above(), pos.below(),
+                pos.north(), pos.south(),
+                pos.east(),  pos.west()
+        };
+
+        for (BlockPos positionCandidate : positionCandidates) {
+            // if it's a part of the tendril already, discard
+            if (tendril.contains(positionCandidate)) continue;
+            // if it's not sculk, discard
+            if (!level.getBlockState(positionCandidate).is(Blocks.SCULK)) continue;
+
+            tendril.push(positionCandidate);
+            found = positionCandidate;
+        }
+
+        return found;
+    }
+
     protected boolean hasRecipe() {
         return itemStackHandler.getStackInSlot(INPUT_SLOT).is(Items.GLASS_BOTTLE);
     }
@@ -155,5 +242,80 @@ public class SculkHarvesterBlockEntity extends BlockEntity {
         itemStackHandler.extractItem(INPUT_SLOT, 1, false);
         itemStackHandler.setStackInSlot(OUTPUT_SLOT,
                 new ItemStack(Items.EXPERIENCE_BOTTLE, itemStackHandler.getStackInSlot(OUTPUT_SLOT).getCount() + 1));
+    }
+
+    @Override
+    public int getContainerSize() {
+        return itemStackHandler.getSlots();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        for (int i = 0; i < itemStackHandler.getSlots(); i++) {
+            if (!itemStackHandler.getStackInSlot(i).isEmpty())
+                return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public ItemStack getItem(int pSlot) {
+        return itemStackHandler.getStackInSlot(pSlot);
+    }
+
+    @Override
+    public ItemStack removeItem(int pSlot, int pAmount) {
+        ItemStack stack = itemStackHandler.getStackInSlot(pSlot);
+        int remaining = Math.max(stack.getCount() - pAmount, 0);
+
+        ItemStack newStack = new ItemStack(
+                stack.getItem(),
+                stack.getCount() - remaining);
+
+        stack.setCount(remaining);
+        if (stack.getCount() == 0)
+            stack = ItemStack.EMPTY;
+
+        itemStackHandler.setStackInSlot(pSlot, stack);
+
+        return newStack;
+    }
+
+    @Override
+    public ItemStack removeItemNoUpdate(int pSlot) {
+        ItemStack stack = itemStackHandler.getStackInSlot(pSlot);
+
+        itemStackHandler.setStackInSlot(pSlot, ItemStack.EMPTY);
+
+        return stack;
+    }
+
+    @Override
+    public void setItem(int pSlot, ItemStack pStack) {
+        itemStackHandler.setStackInSlot(pSlot, pStack);
+    }
+
+    public boolean stillValid(Player pPlayer) {
+        return Container.stillValidBlockEntity(this, pPlayer);
+    }
+
+    @Override
+    public void clearContent() {
+        for (int i = 0; i < itemStackHandler.getSlots(); i++) {
+            itemStackHandler.setStackInSlot(i, ItemStack.EMPTY);
+        }
+    }
+
+    @Nullable
+    @Override
+    public Packet<ClientGamePacketListener> getUpdatePacket() { return ClientboundBlockEntityDataPacket.create(this); }
+
+    @Override
+    public @NotNull CompoundTag getUpdateTag() { return saveWithoutMetadata(); }
+
+    @Override
+    public boolean canTakeItem(Container pTarget, int pIndex, ItemStack pStack) {
+        return pIndex == OUTPUT_SLOT;
     }
 }
