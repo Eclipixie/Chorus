@@ -1,6 +1,7 @@
 package net.eclipixie.chorusmod.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -25,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Stack;
 
-public class SculkHarvesterBlockEntity extends BlockEntity implements Container {
+public class SculkHarvesterBlockEntity extends BlockEntity implements WorldlyContainer {
     public final ItemStackHandler itemStackHandler = new ItemStackHandler(2) {
         @Override
         protected void onContentsChanged(int slot) {
@@ -317,5 +318,21 @@ public class SculkHarvesterBlockEntity extends BlockEntity implements Container 
     @Override
     public boolean canTakeItem(Container pTarget, int pIndex, ItemStack pStack) {
         return pIndex == OUTPUT_SLOT;
+    }
+
+    @Override
+    public int[] getSlotsForFace(Direction pSide) {
+        if (pSide == Direction.DOWN) return new int[]{ OUTPUT_SLOT };
+        else return new int[]{ INPUT_SLOT };
+    }
+
+    @Override
+    public boolean canPlaceItemThroughFace(int pIndex, ItemStack pItemStack, @Nullable Direction pDirection) {
+        return this.canPlaceItem(pIndex, pItemStack);
+    }
+
+    @Override
+    public boolean canTakeItemThroughFace(int pIndex, ItemStack pStack, Direction pDirection) {
+        return pDirection == Direction.DOWN && pIndex == OUTPUT_SLOT;
     }
 }
