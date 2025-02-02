@@ -26,6 +26,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.VOIDGLASS.get());
 
                         output.accept(ModBlocks.SCULK_CORRUPTED_ENDERMAN.get());
+                        output.accept(ModBlocks.SCULK_HARVESTER.get());
                     })
                     .build());
 
