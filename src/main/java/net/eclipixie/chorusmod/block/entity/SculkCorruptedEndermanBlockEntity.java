@@ -26,18 +26,18 @@ import java.util.List;
 public class SculkCorruptedEndermanBlockEntity extends BlockEntity implements Container {
     private final ItemStackHandler itemStackHandler = new ItemStackHandler(1);
 
+    private static final int OUTPUT_SLOT = 0;
+
     public static final float PLAYER_RANGE = 2.0f;
     public static final float XP_ORB_RANGE = 7.0f;
 
     public static final int XP_DRAIN_RATE = 50;
     public static final int XP_DRAIN_DELAY = 5;
 
-    private static final int OUTPUT_SLOT = 0;
-
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
     protected final ContainerData containerData;
-    private int progressRequirement = 10;
+    private int progressRequirement = 50;
     private int progress;
 
     public SculkCorruptedEndermanBlockEntity(BlockPos pPos, BlockState pBlockState) {
@@ -60,6 +60,7 @@ public class SculkCorruptedEndermanBlockEntity extends BlockEntity implements Co
                 }
             }
 
+            // uuuuuuuuh maybe check this later
             @Override
             public int getCount() {
                 return 2;
@@ -117,6 +118,8 @@ public class SculkCorruptedEndermanBlockEntity extends BlockEntity implements Co
     }
 
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+        if (pLevel.isClientSide()) return InteractionResult.PASS;
+
         ItemStack outputStack = itemStackHandler.getStackInSlot(OUTPUT_SLOT);
 
         // if the output is not empty
@@ -129,6 +132,7 @@ public class SculkCorruptedEndermanBlockEntity extends BlockEntity implements Co
             else return InteractionResult.PASS;
         }
         else return InteractionResult.PASS;
+
         return InteractionResult.PASS;
     }
 

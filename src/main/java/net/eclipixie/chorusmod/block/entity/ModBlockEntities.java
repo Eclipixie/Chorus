@@ -20,6 +20,14 @@ public class ModBlockEntities {
                     ).build(null)
             );
 
+    public static final RegistryObject<BlockEntityType<SculkHarvesterBlockEntity>> SCULK_HARVESTER_ENTITY =
+            BLOCK_ENTITIES.register("sculk_harvester",
+                    () -> BlockEntityType.Builder.of(
+                            SculkHarvesterBlockEntity::new,
+                            ModBlocks.SCULK_HARVESTER.get()
+                    ).build(null)
+            );
+
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
     }
