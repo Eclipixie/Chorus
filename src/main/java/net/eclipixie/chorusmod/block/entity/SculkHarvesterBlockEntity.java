@@ -112,10 +112,8 @@ public class SculkHarvesterBlockEntity extends BlockEntity {
             }
         }
 
-        System.out.println(found);
         // if the tendril is extended or it is not time to harvest, leave
         if (found || pLevel.getGameTime() % HARVEST_DELAY != 0) return;
-        System.out.println("harvesting");
 
         // time to harvest
         progress++;

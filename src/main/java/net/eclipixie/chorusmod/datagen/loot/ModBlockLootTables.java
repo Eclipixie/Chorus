@@ -22,13 +22,12 @@ public class ModBlockLootTables extends BlockLootSubProvider {
 
     @Override
     protected void generate() {
-//        this.dropSelf(ModBlocks.SOUND_BLOCK.get());
-
 //        this.add(ModBlocks.SAPPHIRE_ORE.get(),
 //                block -> createOreDrops(ModBlocks.SAPPHIRE_ORE.get(), ModItems.RAW_SAPPHIRE.get(), 2, 5, true));
 
         this.dropWhenSilkTouch(ModBlocks.VOIDGLASS.get());
         this.dropSelf(ModBlocks.SCULK_CORRUPTED_ENDERMAN.get());
+        this.dropSelf(ModBlocks.SCULK_HARVESTER.get());
     }
 
     protected LootTable.Builder createOreDrops(Block pBlock, Item item, int min, int max, boolean fortune) {

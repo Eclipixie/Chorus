@@ -21,6 +21,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
     protected void registerStatesAndModels() {
         blockWithRenderType(ModBlocks.VOIDGLASS.get(), "voidglass", "translucent");
 
+        blockWithCustomModel(ModBlocks.SCULK_HARVESTER.get(), "sculk_harvester_3d", "sculk_harvester_2d");
+
         // Register blockstate with two variants
         getVariantBuilder(ModBlocks.SCULK_CORRUPTED_ENDERMAN.get())
                 .forAllStates(state -> {
