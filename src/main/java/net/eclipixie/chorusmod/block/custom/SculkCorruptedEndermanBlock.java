@@ -95,7 +95,7 @@ public class SculkCorruptedEndermanBlock extends BaseEntityBlock {
             BlockEntity entity = pLevel.getBlockEntity(pPos);
 
             if (entity instanceof SculkCorruptedEndermanBlockEntity) {
-                ((SculkCorruptedEndermanBlockEntity)entity).use(pState, pLevel, pPos, pPlayer, pHand, pHit);
+                return ((SculkCorruptedEndermanBlockEntity)entity).use(pState, pLevel, pPos, pPlayer, pHand, pHit);
             } else {
                 throw new IllegalStateException("Container provider missing for SculkCorruptedEnderman");
             }

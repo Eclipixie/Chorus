@@ -32,7 +32,14 @@ public class SculkHarvesterBlock extends BaseEntityBlock {
 
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
+        if (pLevel.isClientSide()) return InteractionResult.sidedSuccess(!pLevel.isClientSide());
+        System.out.println(pPlayer.getItemInHand(pHand).getItem());
+
+        SculkHarvesterBlockEntity entity = (SculkHarvesterBlockEntity) pLevel.getBlockEntity(pPos);
+
+        assert entity != null;
+        System.out.println("entering");
+        return entity.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
     }
 
     @Nullable

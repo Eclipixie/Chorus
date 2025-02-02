@@ -62,13 +62,27 @@ public class SculkHarvesterBlockEntity extends BlockEntity {
     }
 
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        if (pLevel.isClientSide()) return InteractionResult.PASS;
+        if (pLevel.isClientSide()) return InteractionResult.sidedSuccess(!pLevel.isClientSide());
 
+        ItemStack inputSlot = itemStackHandler.getStackInSlot(INPUT_SLOT);
         ItemStack outputSlot = itemStackHandler.getStackInSlot(OUTPUT_SLOT);
-        if (outputSlot.isEmpty()) return InteractionResult.PASS;
 
-        pPlayer.getInventory().add(outputSlot);
-        itemStackHandler.setStackInSlot(OUTPUT_SLOT, ItemStack.EMPTY);
+        ItemStack handStack = pPlayer.getItemInHand(pHand);
+
+        System.out.println(inputSlot.getItem());
+
+        if (handStack.is(Items.GLASS_BOTTLE)) { // if the player's holding an empty bottle
+            int inputAmount = Math.min(handStack.getCount() + inputSlot.getCount(), handStack.getMaxStackSize());
+            int remaining = handStack.getCount() - (inputAmount - inputSlot.getCount());
+
+            itemStackHandler.setStackInSlot(INPUT_SLOT, new ItemStack(Items.GLASS_BOTTLE, inputAmount));
+            handStack.setCount(remaining);
+            pPlayer.setItemInHand(pHand, handStack);
+        } else if (handStack.isEmpty()) { // if the player's hand is empty
+            pPlayer.setItemInHand(pHand, outputSlot);
+            itemStackHandler.setStackInSlot(OUTPUT_SLOT, ItemStack.EMPTY);
+        }
+        else return InteractionResult.SUCCESS; // otherwise assume the player wants to do smth else
 
         return InteractionResult.SUCCESS;
     }
@@ -116,8 +130,10 @@ public class SculkHarvesterBlockEntity extends BlockEntity {
         if (found || pLevel.getGameTime() % HARVEST_DELAY != 0) return;
 
         // time to harvest
-        progress++;
-        pLevel.setBlock(tendril.pop(), Blocks.AIR.defaultBlockState(), 3);
+        if (progress < progressRequirement) {
+            progress++;
+            pLevel.setBlock(tendril.pop(), Blocks.AIR.defaultBlockState(), 3);
+        }
 
         if (progress < progressRequirement) return;
 
@@ -125,15 +141,19 @@ public class SculkHarvesterBlockEntity extends BlockEntity {
 
         ItemStack outputStack = itemStackHandler.getStackInSlot(OUTPUT_SLOT);
 
-        if (outputStack.isEmpty() ||
-                (outputStack.is(Items.EXPERIENCE_BOTTLE) && outputStack.getCount() < outputStack.getMaxStackSize())) {
-            itemStackHandler.extractItem(INPUT_SLOT, 1, false);
-            itemStackHandler.setStackInSlot(OUTPUT_SLOT,
-                    new ItemStack(Items.EXPERIENCE_BOTTLE, outputStack.getCount() + 1));
-        }
+        if (outputStack.isEmpty()) completeCraft();
+        else if (outputStack.getCount() < outputStack.getMaxStackSize())
+            completeCraft();
     }
 
     protected boolean hasRecipe() {
         return itemStackHandler.getStackInSlot(INPUT_SLOT).is(Items.GLASS_BOTTLE);
+    }
+
+    protected void completeCraft() {
+        progress -= progressRequirement;
+        itemStackHandler.extractItem(INPUT_SLOT, 1, false);
+        itemStackHandler.setStackInSlot(OUTPUT_SLOT,
+                new ItemStack(Items.EXPERIENCE_BOTTLE, itemStackHandler.getStackInSlot(OUTPUT_SLOT).getCount() + 1));
     }
 }
