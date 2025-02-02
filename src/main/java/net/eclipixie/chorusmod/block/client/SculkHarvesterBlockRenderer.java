@@ -59,7 +59,7 @@ public class SculkHarvesterBlockRenderer implements BlockEntityRenderer<SculkHar
         pPoseStack.scale(2f, 2f, 2f);
 
         // 0, -2 / 16, -6 / 16
-        pPoseStack.translate(0, -0.125, -0.325);
+        pPoseStack.translate(0, -0.125, -0.375);
         pPoseStack.mulPose(Axis.ZN.rotationDegrees(180));
 
         pPoseStack.scale(.5f, .5f, .5f);
