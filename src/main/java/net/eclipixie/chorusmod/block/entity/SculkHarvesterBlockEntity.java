@@ -24,6 +24,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Stack;
 
 public class SculkHarvesterBlockEntity extends BlockEntity implements WorldlyContainer {
@@ -41,7 +42,7 @@ public class SculkHarvesterBlockEntity extends BlockEntity implements WorldlyCon
     public static final int OUTPUT_SLOT = 1;
 
     private static final int HARVEST_DELAY = 10;
-    private static final int HARVEST_RANGE = 7;
+    private static final int HARVEST_RANGE = 32;
 
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
@@ -162,7 +163,7 @@ public class SculkHarvesterBlockEntity extends BlockEntity implements WorldlyCon
     public void tick(Level pLevel, BlockPos pPos, BlockState pState, SculkHarvesterBlockEntity entity) {
         if (pLevel.isClientSide()) return; // quit if we're client side
         if (tendril.isEmpty()) { // add sculk block if tendril is empty
-            BlockPos newSculkBlock = getAdjacentSculkBlock(pPos, pLevel);
+            BlockPos newSculkBlock = getAdjacentSculkBlock(pPos, pPos, pLevel);
 
             if (newSculkBlock != null) tendril.push(newSculkBlock);
 
@@ -184,7 +185,7 @@ public class SculkHarvesterBlockEntity extends BlockEntity implements WorldlyCon
         boolean found = false;
 
         if (tendril.size() < HARVEST_RANGE) {
-            BlockPos newSculkBlock = getAdjacentSculkBlock(tendrilEnd, pLevel);
+            BlockPos newSculkBlock = getAdjacentSculkBlock(tendrilEnd, pPos, pLevel);
             if (newSculkBlock != null) {
                 found = true;
                 tendril.push(newSculkBlock);
@@ -211,15 +212,18 @@ public class SculkHarvesterBlockEntity extends BlockEntity implements WorldlyCon
             completeCraft();
     }
 
-    protected @Nullable BlockPos getAdjacentSculkBlock(BlockPos pos, Level level) {
+    protected @Nullable BlockPos getAdjacentSculkBlock(BlockPos pos, BlockPos source, Level level) {
         BlockPos found = null;
 
         // scannable blocks
-        BlockPos[] positionCandidates = {
-                pos.above(), pos.below(),
+        List<BlockPos> positionCandidates = new java.util.ArrayList<>(List.of(
                 pos.north(), pos.south(),
-                pos.east(),  pos.west()
-        };
+                pos.above(), pos.below(),
+                pos.east(), pos.west()
+        ));
+
+        positionCandidates.sort(
+                (o1, o2) -> (int) (o1.distSqr(source) - o2.distSqr(source)));
 
         for (BlockPos positionCandidate : positionCandidates) {
             // if it's a part of the tendril already, discard
@@ -229,6 +233,9 @@ public class SculkHarvesterBlockEntity extends BlockEntity implements WorldlyCon
 
             tendril.push(positionCandidate);
             found = positionCandidate;
+
+//            System.out.println(mags[0] + " " + mags[1] + " " + mags[2]);
+            System.out.println(positionCandidates.size());
         }
 
         return found;
@@ -245,6 +252,7 @@ public class SculkHarvesterBlockEntity extends BlockEntity implements WorldlyCon
                 new ItemStack(Items.EXPERIENCE_BOTTLE, itemStackHandler.getStackInSlot(OUTPUT_SLOT).getCount() + 1));
     }
 
+    //region inventory management
     @Override
     public int getContainerSize() {
         return itemStackHandler.getSlots();
@@ -307,14 +315,9 @@ public class SculkHarvesterBlockEntity extends BlockEntity implements WorldlyCon
             itemStackHandler.setStackInSlot(i, ItemStack.EMPTY);
         }
     }
+    //endregion
 
-    @Nullable
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() { return ClientboundBlockEntityDataPacket.create(this); }
-
-    @Override
-    public @NotNull CompoundTag getUpdateTag() { return saveWithoutMetadata(); }
-
+    //region side-specific
     @Override
     public boolean canTakeItem(Container pTarget, int pIndex, ItemStack pStack) {
         return pIndex == OUTPUT_SLOT;
@@ -335,4 +338,12 @@ public class SculkHarvesterBlockEntity extends BlockEntity implements WorldlyCon
     public boolean canTakeItemThroughFace(int pIndex, ItemStack pStack, Direction pDirection) {
         return pDirection == Direction.DOWN && pIndex == OUTPUT_SLOT;
     }
+    //endregion
+
+    @Nullable
+    @Override
+    public Packet<ClientGamePacketListener> getUpdatePacket() { return ClientboundBlockEntityDataPacket.create(this); }
+
+    @Override
+    public @NotNull CompoundTag getUpdateTag() { return saveWithoutMetadata(); }
 }
