@@ -8,6 +8,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,6 +23,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
     @Override
     protected void buildRecipes(@NotNull Consumer<FinishedRecipe> consumer) {
+        // ender shard
         oreBlasting(
                 consumer,
                 List.of(Items.ENDER_PEARL),
@@ -30,6 +33,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 100,
                 "ender_shard");
 
+        //region voidglass
         ShapelessRecipeBuilder.shapeless(
                     RecipeCategory.BUILDING_BLOCKS,
                     ModBlocks.VOIDGLASS.get(), 1)
@@ -45,6 +49,18 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .requires(Items.GLASS, 2)
                 .unlockedBy("has_ender_shard", has(ModItems.ENDER_SHARD.get()))
                 .save(consumer, getItemName(ModBlocks.VOIDGLASS.get()) + "_duo");
+        //endregion
+
+        // sculk harvester
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, ModBlocks.SCULK_HARVESTER.get())
+                .define('E', Ingredient.of(Blocks.END_STONE_BRICKS))
+                .define('R', Ingredient.of(Blocks.END_ROD))
+                .define('S', Ingredient.of(Items.ECHO_SHARD))
+                .pattern("R R")
+                .pattern("ESE")
+                .pattern("RER")
+                .unlockedBy(getHasName(Blocks.END_STONE_BRICKS), has(Blocks.END_STONE_BRICKS))
+                .save(consumer);
 
         // smithing recipes go template, subject, material
 
