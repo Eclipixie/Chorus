@@ -28,6 +28,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.dropWhenSilkTouch(ModBlocks.VOIDGLASS.get());
         this.dropSelf(ModBlocks.SCULK_CORRUPTED_ENDERMAN.get());
         this.dropSelf(ModBlocks.SCULK_HARVESTER.get());
+        this.dropSelf(ModBlocks.END_STONE_RAIL.get());
     }
 
     protected LootTable.Builder createOreDrops(Block pBlock, Item item, int min, int max, boolean fortune) {

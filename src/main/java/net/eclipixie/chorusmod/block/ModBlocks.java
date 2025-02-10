@@ -1,6 +1,7 @@
 package net.eclipixie.chorusmod.block;
 
 import net.eclipixie.chorusmod.ChorusMod;
+import net.eclipixie.chorusmod.block.custom.EndStoneRail;
 import net.eclipixie.chorusmod.block.custom.SculkCorruptedEndermanBlock;
 import net.eclipixie.chorusmod.block.custom.SculkHarvesterBlock;
 import net.eclipixie.chorusmod.block.custom.VoidglassBlock;
@@ -27,6 +28,8 @@ public class ModBlocks {
             () -> new SculkCorruptedEndermanBlock(BlockBehaviour.Properties.copy(Blocks.LECTERN).noOcclusion()));
     public static final RegistryObject<Block> SCULK_HARVESTER = registerBlock("sculk_harvester",
             () -> new SculkHarvesterBlock(BlockBehaviour.Properties.copy(Blocks.SCULK_CATALYST).noOcclusion()));
+    public static final RegistryObject<Block> END_STONE_RAIL = registerBlock("end_stone_rail",
+            () -> new EndStoneRail(BlockBehaviour.Properties.copy(Blocks.PEARLESCENT_FROGLIGHT)));
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);

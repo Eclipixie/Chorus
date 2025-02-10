@@ -50,6 +50,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
                             .rotationY(y)
                             .build();
                 });
+
+        simpleBlockWithItem(ModBlocks.END_STONE_RAIL.get(), models().cubeColumn(
+                "end_stone_rail",
+                modLoc("block/end_stone_rail_side"),
+                modLoc("block/end_stone_rail_end")));
     }
 
     private void blockWithItem(RegistryObject<Block> blockRegistryObject) {
