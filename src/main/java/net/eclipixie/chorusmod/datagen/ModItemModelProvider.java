@@ -43,6 +43,11 @@ public class ModItemModelProvider extends ItemModelProvider {
 
         withExistingParent("sculk_corrupted_enderman", new ResourceLocation("item/generated"))
                 .texture("layer0", new ResourceLocation("chorusmod", "item/sculk_corrupted_enderman"));
+
+        simpleItem(ModItems.SCULK_EXOSKELETON_HELMET, "generated");
+        simpleItem(ModItems.SCULK_EXOSKELETON_CHESTPLATE, "generated");
+        simpleItem(ModItems.SCULK_EXOSKELETON_LEGGINGS, "generated");
+        simpleItem(ModItems.SCULK_EXOSKELETON_BOOTS, "generated");
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item, String type) {

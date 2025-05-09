@@ -25,6 +25,11 @@ public class ModCreativeModeTabs {
 
                         output.accept(ModBlocks.VOIDGLASS.get());
 
+                        output.accept(ModItems.SCULK_EXOSKELETON_HELMET.get());
+                        output.accept(ModItems.SCULK_EXOSKELETON_CHESTPLATE.get());
+                        output.accept(ModItems.SCULK_EXOSKELETON_LEGGINGS.get());
+                        output.accept(ModItems.SCULK_EXOSKELETON_BOOTS.get());
+
                         output.accept(ModBlocks.SCULK_CORRUPTED_ENDERMAN.get());
                         output.accept(ModBlocks.SCULK_HARVESTER.get());
 

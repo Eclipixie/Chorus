@@ -20,6 +20,15 @@ public class ModItems {
     public static final RegistryObject<Item> ENDER_SHARD = ITEMS.register("ender_shard",
             () -> new Item(new Item.Properties().stacksTo(16)));
 
+    public static final RegistryObject<Item> SCULK_EXOSKELETON_HELMET = ITEMS.register("sculk_exoskeleton_helmet",
+            () -> new ArmorItem(ModArmorMaterials.SCULK_EXOSKELETON, ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<Item> SCULK_EXOSKELETON_CHESTPLATE = ITEMS.register("sculk_exoskeleton_chestplate",
+            () -> new ArmorItem(ModArmorMaterials.SCULK_EXOSKELETON, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+    public static final RegistryObject<Item> SCULK_EXOSKELETON_LEGGINGS = ITEMS.register("sculk_exoskeleton_leggings",
+            () -> new ArmorItem(ModArmorMaterials.SCULK_EXOSKELETON, ArmorItem.Type.LEGGINGS, new Item.Properties()));
+    public static final RegistryObject<Item> SCULK_EXOSKELETON_BOOTS = ITEMS.register("sculk_exoskeleton_boots",
+            () -> new ArmorItem(ModArmorMaterials.SCULK_EXOSKELETON, ArmorItem.Type.BOOTS, new Item.Properties()));
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }
