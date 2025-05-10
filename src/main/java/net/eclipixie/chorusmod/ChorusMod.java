@@ -7,6 +7,7 @@ import net.eclipixie.chorusmod.block.client.SculkHarvesterBlockRenderer;
 import net.eclipixie.chorusmod.block.entity.ModBlockEntities;
 import net.eclipixie.chorusmod.entity.ModEntities;
 import net.eclipixie.chorusmod.entity.client.renderer.PearlBombEntityRenderer;
+import net.eclipixie.chorusmod.entity.client.renderer.SculkExoskeletonRenderer;
 import net.eclipixie.chorusmod.event.BlockEvents;
 import net.eclipixie.chorusmod.event.EntityEvents;
 import net.eclipixie.chorusmod.item.ModCreativeModeTabs;
@@ -14,6 +15,8 @@ import net.eclipixie.chorusmod.item.ModItems;
 import net.eclipixie.chorusmod.mobeffects.ModMobEffects;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -70,31 +73,12 @@ public class ChorusMod {
 
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
-        }
+
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
 
-    }
-
-    // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
-    @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents {
-        @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event) {
-            EntityRenderers.register(
-                    ModEntities.PEARL_BOMB.get(),
-                    PearlBombEntityRenderer::new);
-
-            BlockEntityRenderers.register(
-                    ModBlockEntities.SCULK_CORRUPTED_ENDERMAN_ENTITY.get(),
-                    SculkCorruptedEndermanBlockRenderer::new);
-            BlockEntityRenderers.register(
-                    ModBlockEntities.SCULK_HARVESTER_ENTITY.get(),
-                    SculkHarvesterBlockRenderer::new);
-        }
     }
 }

@@ -2,6 +2,7 @@ package net.eclipixie.chorusmod.entity.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.eclipixie.chorusmod.ChorusMod;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -16,7 +17,8 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class SculkExoskeletonModel3<L extends LivingEntity> extends EntityModel<L> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "sculkexoskeletonmodel3"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(
+            ChorusMod.MOD_ID, "sculkexoskeletonmodel3"), "main");
     private final ModelPart Root;
     private final ModelPart Head;
     private final ModelPart Body;
