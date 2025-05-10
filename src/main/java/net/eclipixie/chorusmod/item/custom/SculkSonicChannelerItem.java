@@ -2,8 +2,6 @@ package net.eclipixie.chorusmod.item.custom;
 
 import net.eclipixie.chorusmod.item.ModArmorMaterials;
 import net.eclipixie.chorusmod.item.ModItems;
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -13,20 +11,19 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipBlockStateContext;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.List;
-
 public class SculkSonicChannelerItem extends Item {
+    private static final double KB_SCALAR = 0.05;
+
     public SculkSonicChannelerItem(Properties pProperties) {
         super(pProperties);
     }
@@ -77,7 +74,7 @@ public class SculkSonicChannelerItem extends Item {
             dir = new Vec3(dir.x, 0, dir.z)
                     .normalize();
             dir = dir.add(new Vec3(0, .15, 0))
-                    .scale(3);
+                    .scale(1.5);
 
             if (level.isClientSide()) {
                 level.playSound(pPlayer, pPlayer.getOnPos(), SoundEvents.WARDEN_SONIC_BOOM,
@@ -131,14 +128,21 @@ public class SculkSonicChannelerItem extends Item {
                         serverLevel.getEntitiesOfClass(LivingEntity.class, pPlayer.getBoundingBox().inflate(range))) {
                     // disable friendly fire
                     if (livingentity.getUUID() == pPlayer.getUUID()) continue;
-                    // check if the entity is within 5 blocks
+                    // check if the entity is within range
                     if (!(pPlayer.distanceToSqr(livingentity) > Mth.square(range))) {
-                        if (checkSonicPassthrough(serverLevel, pPlayer.position(), livingentity.position())) {
+                        if (checkSonicPassthrough(serverLevel, pPlayer.getEyePosition(), livingentity.position())) {
                             float finalDamage = (float) (12.) *
-                                    (float)Math.sqrt((range - (double)pPlayer.distanceTo(livingentity)) / range) +
+                                    (float)Math.sqrt((range - pPlayer.getEyePosition().distanceTo(livingentity.position())) / range) +
                                     (float) (2.);
 
                             livingentity.hurt(pPlayer.damageSources().magic(), finalDamage);
+
+                            Vec3 impulse = livingentity.position().subtract(pPlayer.getEyePosition())
+                                    .normalize()
+                                    .scale(finalDamage * KB_SCALAR)
+                                    .scale(1. - livingentity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+
+                            livingentity.push(impulse.x(), impulse.y(), impulse.z());
                         }
                     }
                 }
@@ -156,6 +160,10 @@ public class SculkSonicChannelerItem extends Item {
             if (level.isClientSide()) {
                 level.playSound(pPlayer, pPlayer.getOnPos(), SoundEvents.WARDEN_SONIC_BOOM,
                         SoundSource.PLAYERS, 1f, 1f);
+
+                Vec3 impulse = pPlayer.getLookAngle().normalize().scale(-.6);
+
+                pPlayer.push(impulse.x(), impulse.y(), impulse.z());
             }
             else {
                 ServerLevel serverLevel = (ServerLevel) level;
@@ -181,7 +189,14 @@ public class SculkSonicChannelerItem extends Item {
                         if (livingentity.getUUID() == pPlayer.getUUID()) continue;
                         if (!checkSonicPassthrough(serverLevel, pPlayer.getEyePosition(), livingentity.getEyePosition())) continue;
 
-                        livingentity.hurt(pPlayer.damageSources().magic(), 10);
+                        float damage = 10;
+
+                        livingentity.hurt(pPlayer.damageSources().magic(), damage);
+
+                        Vec3 impulse = dir.scale(damage * 0.6 * KB_SCALAR)
+                                .scale(1. - livingentity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+
+                        livingentity.push(impulse.x(), impulse.y(), impulse.z());
                     }
                 }
             }
