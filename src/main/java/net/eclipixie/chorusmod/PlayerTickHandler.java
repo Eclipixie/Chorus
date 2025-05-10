@@ -1,5 +1,6 @@
 package net.eclipixie.chorusmod;
 
+import net.eclipixie.chorusmod.item.custom.SculkSonicChannelerItem;
 import net.eclipixie.chorusmod.item.custom.VoidburstSpyglassItem;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
@@ -17,6 +18,21 @@ public class PlayerTickHandler {
         } else {
             // Reset FOV if the spyglass is not in use
             Minecraft.getInstance().options.fov().set(70); // Reset to default FOV
+        }
+
+        if (event.phase == TickEvent.Phase.END) {
+            if (event.player.level().isClientSide) {
+                if (Minecraft.getInstance().options.keySprint.isDown()) {
+                    SculkSonicChannelerItem.sonicDash(event.player);
+                }
+                if (Minecraft.getInstance().options.keyJump.isDown()) {
+                    SculkSonicChannelerItem.sonicJump(event.player);
+                }
+            }
+
+            if (event.player.isShiftKeyDown()) {
+                SculkSonicChannelerItem.sonicRoar(event.player);
+            }
         }
     }
 }

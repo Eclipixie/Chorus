@@ -29,6 +29,9 @@ public class ModItems {
     public static final RegistryObject<Item> SCULK_EXOSKELETON_BOOTS = ITEMS.register("sculk_exoskeleton_boots",
             () -> new ArmorItem(ModArmorMaterials.SCULK_EXOSKELETON, ArmorItem.Type.BOOTS, new Item.Properties()));
 
+    public static final RegistryObject<Item> SCULK_SONIC_CHANNELER = ITEMS.register("sculk_sonic_channeler",
+            () -> new SculkSonicChannelerItem(new Item.Properties().stacksTo(1)));
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }

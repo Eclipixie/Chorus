@@ -30,6 +30,8 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SCULK_EXOSKELETON_LEGGINGS.get());
                         output.accept(ModItems.SCULK_EXOSKELETON_BOOTS.get());
 
+                        output.accept(ModItems.SCULK_SONIC_CHANNELER.get());
+
                         output.accept(ModBlocks.SCULK_CORRUPTED_ENDERMAN.get());
                         output.accept(ModBlocks.SCULK_HARVESTER.get());
 

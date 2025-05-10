@@ -48,14 +48,15 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.SCULK_EXOSKELETON_CHESTPLATE, "generated");
         simpleItem(ModItems.SCULK_EXOSKELETON_LEGGINGS, "generated");
         simpleItem(ModItems.SCULK_EXOSKELETON_BOOTS, "generated");
+
+        simpleItem(ModItems.SCULK_SONIC_CHANNELER, "handheld");
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item, String type) {
         return withExistingParent(item.getId().getPath(),
                 new ResourceLocation("item/" + type)
         ).texture("layer0",
-                new ResourceLocation(ChorusMod.MOD_ID,"item/" + item.getId().getPath())
-        );
+                new ResourceLocation(ChorusMod.MOD_ID,"item/" + item.getId().getPath()));
     }
 
     private void trimmedArmorItem(RegistryObject<Item> itemRegistryObject) {

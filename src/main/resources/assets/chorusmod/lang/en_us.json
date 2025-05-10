@@ -5,6 +5,13 @@
   "item.chorusmod.soundsight_spyglass": "Soundsight Spyglass",
   "item.chorusmod.ender_shard": "Ender Shard",
 
+  "item.chorusmod.sculk_exoskeleton_helmet": "Sculk Cranium",
+  "item.chorusmod.sculk_exoskeleton_chestplate": "Sculk Carapace",
+  "item.chorusmod.sculk_exoskeleton_leggings": "Sculk Tendrils",
+  "item.chorusmod.sculk_exoskeleton_boots": "Sculk Boots",
+
+  "item.chorusmod.sculk_sonic_channeler": "Sculk Sonic Channeler",
+
   "block.chorusmod.voidglass": "Voidglass",
 
   "block.chorusmod.sculk_corrupted_enderman": "Sculk Corrupted Enderman",
