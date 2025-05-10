@@ -163,15 +163,24 @@ public class SculkSonicChannelerItem extends Item {
                 serverLevel.playSound(pPlayer, pPlayer.getOnPos(), SoundEvents.WARDEN_SONIC_BOOM,
                         SoundSource.PLAYERS, 1f, 1f);
 
-                Vec3 from = pPlayer.getEyePosition();
-                Vec3 to = from.add(pPlayer.getLookAngle().normalize().scale(7));
+                Vec3 dir = pPlayer.getLookAngle().normalize();
+                Vec3 point = pPlayer.getEyePosition();
 
-                for(LivingEntity livingentity :
-                        serverLevel.getEntitiesOfClass(LivingEntity.class, new AABB(to, from)
-                                .inflate(0.5))) {
-                    if (livingentity.getUUID() == pPlayer.getUUID()) continue;
+                for (int i = 0; i < 7 * 2; i++) {
+                    point = point.add(dir.scale(0.5));
 
-                    if (checkSonicPassthrough(serverLevel, from, livingentity.position())) {
+                    if (i % 2 == 0) {
+                        serverLevel.sendParticles(ParticleTypes.SONIC_BOOM,
+                                point.x(), point.y(), point.z(), 1,
+                                0, 0, 0, 0);
+                    }
+
+                    for(LivingEntity livingentity :
+                            serverLevel.getEntitiesOfClass(LivingEntity.class, new AABB(point, point)
+                                    .inflate(1))) {
+                        if (livingentity.getUUID() == pPlayer.getUUID()) continue;
+                        if (!checkSonicPassthrough(serverLevel, pPlayer.getEyePosition(), livingentity.getEyePosition())) continue;
+
                         livingentity.hurt(pPlayer.damageSources().magic(), 10);
                     }
                 }
