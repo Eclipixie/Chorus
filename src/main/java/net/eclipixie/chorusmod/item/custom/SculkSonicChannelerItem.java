@@ -2,7 +2,10 @@ package net.eclipixie.chorusmod.item.custom;
 
 import net.eclipixie.chorusmod.item.ModArmorMaterials;
 import net.eclipixie.chorusmod.item.ModItems;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
@@ -14,9 +17,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipBlockStateContext;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.List;
 
 public class SculkSonicChannelerItem extends Item {
     public SculkSonicChannelerItem(Properties pProperties) {
@@ -50,33 +58,20 @@ public class SculkSonicChannelerItem extends Item {
     private static void sonicGlobals(Player pPlayer) {
         pPlayer.getCooldowns().addCooldown(ModItems.SCULK_SONIC_CHANNELER.get(),
                 40);
+        pPlayer.stopUsingItem();
     }
 
-    public static void sonicJump(Player pPlayer) {
-        Level level = pPlayer.level();
-
-        if (level.isClientSide && checkSonic(pPlayer)) {
-            level.playSound(pPlayer, pPlayer.getOnPos(), SoundEvents.WARDEN_SONIC_BOOM,
-                    SoundSource.PLAYERS, 1f, 1f);
-            sonicGlobals(pPlayer);
-
-            pPlayer.push(0, 1.5, 0);
-        }
+    public static boolean checkSonicPassthrough(Level pLevel, Vec3 pFrom, Vec3 pTo) {
+        return pLevel.isBlockInLine(new ClipBlockStateContext(pFrom, pTo,
+                (state) -> state.is(BlockTags.OCCLUDES_VIBRATION_SIGNALS)))
+                .getType() != HitResult.Type.BLOCK;
     }
 
     public static void sonicDash(Player pPlayer) {
         Level level = pPlayer.level();
 
-        if (level.isClientSide && checkSonic(pPlayer)) {
-            level.playSound(pPlayer, pPlayer.getOnPos(), SoundEvents.WARDEN_SONIC_BOOM,
-                    SoundSource.PLAYERS, 1f, 1f);
+        if (checkSonic(pPlayer)) {
             sonicGlobals(pPlayer);
-
-            Vec3 pos = pPlayer.getEyePosition();
-
-            level.addParticle(ParticleTypes.SONIC_BOOM,
-                    pos.x(), pos.y() - 1, pos.z(),
-                    0, 0, 0);
 
             Vec3 dir = pPlayer.getDeltaMovement();
             dir = new Vec3(dir.x, 0, dir.z)
@@ -84,53 +79,100 @@ public class SculkSonicChannelerItem extends Item {
             dir = dir.add(new Vec3(0, .15, 0))
                     .scale(3);
 
-            pPlayer.push(dir.x, dir.y, dir.z);
+            if (level.isClientSide()) {
+                level.playSound(pPlayer, pPlayer.getOnPos(), SoundEvents.WARDEN_SONIC_BOOM,
+                        SoundSource.PLAYERS, 1f, 1f);
+
+                pPlayer.push(dir.x, dir.y, dir.z);
+            }
+            else {
+                ServerLevel serverLevel = (ServerLevel) level;
+
+                serverLevel.playSound(pPlayer, pPlayer.getOnPos(), SoundEvents.WARDEN_SONIC_BOOM,
+                        SoundSource.PLAYERS, 1f, 1f);
+
+                Vec3 pos = pPlayer.getEyePosition().add(0, -.5, 0);
+
+                for (int i = 0; i < 3; i++) {
+                    serverLevel.sendParticles(ParticleTypes.SONIC_BOOM,
+                            pos.x() + dir.x() * i, pos.y() + dir.y() * i, pos.z() + dir.z() * i, 1,
+                            0, 0, 0, 0);
+                }
+            }
         }
     }
 
     public static void sonicRoar(Player pPlayer) {
         Level level = pPlayer.level();
-        
+
         if (checkSonic(pPlayer)) {
-            if (level.isClientSide) {
-                level.playSound(pPlayer, pPlayer.getOnPos(), SoundEvents.WARDEN_SONIC_BOOM,
-                        SoundSource.PLAYERS, 1f, 1f);
-                return;
-            }
-            
             sonicGlobals(pPlayer);
 
-            Vec3 vec3 = pPlayer.position();
+            if (level.isClientSide()) {
+                level.playSound(pPlayer, pPlayer.getOnPos(), SoundEvents.WARDEN_SONIC_BOOM,
+                        SoundSource.PLAYERS, 1f, 1f);
+            }
+            else {
+                ServerLevel serverLevel = (ServerLevel) level;
 
-            double range = 8;
+                serverLevel.playSound(pPlayer, pPlayer.getOnPos(), SoundEvents.WARDEN_SONIC_BOOM,
+                        SoundSource.PLAYERS, 1f, 1f);
 
-            for(LivingEntity livingentity : level.getEntitiesOfClass(LivingEntity.class, pPlayer.getBoundingBox().inflate(5.0D))) {
-                // disable friendly fire
-                if (livingentity.getUUID() == pPlayer.getUUID()) continue;
-                // check if the entity is within 5 blocks
-                if (!(pPlayer.distanceToSqr(livingentity) > Mth.square(range))) {
-                    boolean doDamage = false;
+                double range = 5;
 
-                    // checking both y values for 2-high entities i think?
-                    for(int i = 0; i < 2; ++i) {
-                        // position
-                        Vec3 vec31 = new Vec3(livingentity.getX(), livingentity.getY(0.5D * (double)i), livingentity.getZ());
+                Vec3 pos = pPlayer.getEyePosition().add(0, 0, 0);
 
-                        // check blocks in line for vibration occlusions
-                        if (level.isBlockInLine(new ClipBlockStateContext(vec3, vec31,
-                                (state) -> state.is(BlockTags.OCCLUDES_VIBRATION_SIGNALS))) // only protect with vibration occluders
-                                .getType() != HitResult.Type.BLOCK) {
-                            doDamage = true;
-                            break;
+                serverLevel.sendParticles(ParticleTypes.SONIC_BOOM,
+                        pos.x(), pos.y(), pos.z(), 24,
+                        range * .5, range * .5, range * .5, 0);
+
+                //#region sonic roar
+                for(LivingEntity livingentity :
+                        serverLevel.getEntitiesOfClass(LivingEntity.class, pPlayer.getBoundingBox().inflate(range))) {
+                    // disable friendly fire
+                    if (livingentity.getUUID() == pPlayer.getUUID()) continue;
+                    // check if the entity is within 5 blocks
+                    if (!(pPlayer.distanceToSqr(livingentity) > Mth.square(range))) {
+                        if (checkSonicPassthrough(serverLevel, pPlayer.position(), livingentity.position())) {
+                            float finalDamage = (float) (12.) *
+                                    (float)Math.sqrt((range - (double)pPlayer.distanceTo(livingentity)) / range) +
+                                    (float) (2.);
+
+                            livingentity.hurt(pPlayer.damageSources().magic(), finalDamage);
                         }
                     }
+                }
+                //#endregion
+            }
+        }
+    }
 
-                    if (doDamage) {
-                        float finalDamage = (float) (7.) *
-                                (float)Math.sqrt((range - (double)pPlayer.distanceTo(livingentity)) / range) +
-                                (float) (2.);
+    public static void sonicBlast(Player pPlayer) {
+        Level level = pPlayer.level();
 
-                        livingentity.hurt(pPlayer.damageSources().magic(), finalDamage);
+        if (checkSonic(pPlayer)) {
+            sonicGlobals(pPlayer);
+
+            if (level.isClientSide()) {
+                level.playSound(pPlayer, pPlayer.getOnPos(), SoundEvents.WARDEN_SONIC_BOOM,
+                        SoundSource.PLAYERS, 1f, 1f);
+            }
+            else {
+                ServerLevel serverLevel = (ServerLevel) level;
+
+                serverLevel.playSound(pPlayer, pPlayer.getOnPos(), SoundEvents.WARDEN_SONIC_BOOM,
+                        SoundSource.PLAYERS, 1f, 1f);
+
+                Vec3 from = pPlayer.getEyePosition();
+                Vec3 to = from.add(pPlayer.getLookAngle().normalize().scale(7));
+
+                for(LivingEntity livingentity :
+                        serverLevel.getEntitiesOfClass(LivingEntity.class, new AABB(to, from)
+                                .inflate(0.5))) {
+                    if (livingentity.getUUID() == pPlayer.getUUID()) continue;
+
+                    if (checkSonicPassthrough(serverLevel, from, livingentity.position())) {
+                        livingentity.hurt(pPlayer.damageSources().magic(), 10);
                     }
                 }
             }
