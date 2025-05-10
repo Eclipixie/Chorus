@@ -6,7 +6,7 @@ import net.eclipixie.chorusmod.block.client.SculkCorruptedEndermanBlockRenderer;
 import net.eclipixie.chorusmod.block.client.SculkHarvesterBlockRenderer;
 import net.eclipixie.chorusmod.block.entity.ModBlockEntities;
 import net.eclipixie.chorusmod.entity.ModEntities;
-import net.eclipixie.chorusmod.entity.client.PearlBombEntityRenderer;
+import net.eclipixie.chorusmod.entity.client.renderer.PearlBombEntityRenderer;
 import net.eclipixie.chorusmod.event.BlockEvents;
 import net.eclipixie.chorusmod.event.EntityEvents;
 import net.eclipixie.chorusmod.item.ModCreativeModeTabs;

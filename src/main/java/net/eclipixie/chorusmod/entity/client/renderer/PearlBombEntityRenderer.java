@@ -1,4 +1,4 @@
-package net.eclipixie.chorusmod.entity.client;
+package net.eclipixie.chorusmod.entity.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
