@@ -60,6 +60,6 @@ public class EntityEvents {
 
     @SubscribeEvent
     public static void renderPlayerEvent(RenderPlayerEvent event) {
-        event.setCanceled(true);
+
     }
 }
