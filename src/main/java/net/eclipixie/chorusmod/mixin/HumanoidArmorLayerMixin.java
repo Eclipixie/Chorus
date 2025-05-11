@@ -64,7 +64,7 @@ public abstract class HumanoidArmorLayerMixin<T extends LivingEntity, M extends 
     @Shadow
     private boolean usesInnerModel(EquipmentSlot pSlot) { return false; }
 
-    @Inject(method = "renderArmorPiece", at = @At("RETURN"), require = 1)
+    @Inject(method = "renderArmorPiece", at = @At("RETURN"))
     private void invokeRenderArmorPiece(PoseStack pPoseStack, MultiBufferSource pBuffer, T pLivingEntity, EquipmentSlot pSlot, int pPackedLight, A pModel, CallbackInfo ci) {
         if (pLivingEntity instanceof Player player) {
             if (ArmorSetCore.checkSet(ModArmorMaterials.SCULK_EXOSKELETON, player)) {

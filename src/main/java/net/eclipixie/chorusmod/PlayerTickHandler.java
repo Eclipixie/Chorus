@@ -40,10 +40,6 @@ public class PlayerTickHandler {
                             sSonicKeybindPacket.SonicAbilityType.BLAST));
                 }
             }
-
-//            if (event.player.isShiftKeyDown()) {
-//                SculkSonicChannelerItem.sonicRoar(event.player);
-//            }
         }
     }
 }
