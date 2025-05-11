@@ -1,5 +1,6 @@
 package net.eclipixie.chorusmod.event;
 
+import net.eclipixie.chorusmod.ChorusMod;
 import net.eclipixie.chorusmod.block.ModBlocks;
 import net.eclipixie.chorusmod.block.custom.EndStoneRail;
 import net.eclipixie.chorusmod.entity.ModEntities;
@@ -18,15 +19,19 @@ import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.Collection;
 import java.util.List;
 
+@Mod.EventBusSubscriber(modid = ChorusMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class EntityEvents {
     @SubscribeEvent
     public static void onLivingDrop(LivingDropsEvent event) {
@@ -51,5 +56,10 @@ public class EntityEvents {
 
     public static void register(IEventBus eventBus) {
         eventBus.addListener(EntityEvents::onLivingDrop);
+    }
+
+    @SubscribeEvent
+    public static void renderPlayerEvent(RenderPlayerEvent event) {
+        event.setCanceled(true);
     }
 }
