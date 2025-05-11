@@ -9,6 +9,9 @@ import net.eclipixie.chorusmod.entity.client.model.SculkExoskeletonModel3;
 import net.eclipixie.chorusmod.entity.client.renderer.PearlBombEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
@@ -41,5 +44,10 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void addLayers(EntityRenderersEvent.AddLayers event) {
+        LivingEntityRenderer renderer = event.getRenderer(EntityType.PLAYER);
+
+        if (renderer instanceof PlayerRenderer playerRenderer) {
+
+        }
     }
 }

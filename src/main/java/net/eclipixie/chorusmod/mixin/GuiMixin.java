@@ -39,12 +39,12 @@ public class GuiMixin {
      */
     @Overwrite
     public void renderSpyglassOverlay(GuiGraphics pGuiGraphics, float pScopeScale) {
+        // added: getting held item and verifying presence of scope
         Item heldItem = Minecraft.getInstance().player.getUseItem().getItem();
         Type heldItemType = heldItem.getClass();
 
-        if (!SPYGLASS_SCOPE_LOCATIONS.containsKey(heldItemType)) {
+        if (!SPYGLASS_SCOPE_LOCATIONS.containsKey(heldItemType))
             return;
-        }
 
         float f = (float)Math.min(this.screenWidth, this.screenHeight);
         float f1 = Math.min((float)this.screenWidth / f, (float)this.screenHeight / f) * pScopeScale;
@@ -54,6 +54,7 @@ public class GuiMixin {
         int l = (this.screenHeight - j) / 2;
         int i1 = k + i;
         int j1 = l + j;
+        // modified: changed SPYGLASS_SCOPE_LOCATION
         pGuiGraphics.blit(SPYGLASS_SCOPE_LOCATIONS.get(heldItemType), k, l, -90, 0.0F, 0.0F, i, j, i, j);
         pGuiGraphics.fill(RenderType.guiOverlay(), 0, j1, this.screenWidth, this.screenHeight, -90, -16777216);
         pGuiGraphics.fill(RenderType.guiOverlay(), 0, 0, this.screenWidth, l, -90, -16777216);

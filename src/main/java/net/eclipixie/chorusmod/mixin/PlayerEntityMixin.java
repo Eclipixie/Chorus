@@ -21,6 +21,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
      */
     @Overwrite
     public boolean isScoping() {
+        // modified: checks tag rather than item
         return (this.isUsingItem() &&
                 this.getUseItem().is(ModTags.Items.IS_SPYGLASS));
     }

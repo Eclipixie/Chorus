@@ -83,8 +83,17 @@ sourceSets {
 }
 
 mixin {
-    add sourceSets.main, 'mixins.mymod.refmap.json'
+    // refmaps for SourceSets
+    add sourceSets.main, 'mixins.chorusmod.refmap.json'
+
+    // Configs for runs and jars
     config "mixins.chorusmod.json"
+
+    // Specify options for dev run configs
+    dumpTargetOnFailure = true
+
+    // Options for the Annotation Processor
+    quiet
 }
 
 repositories {
@@ -105,7 +114,8 @@ repositories {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    implementation "org.spongepowered:mixin:0.8.5"
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
 
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
     // compile against the JEI API but do not include it at runtime
