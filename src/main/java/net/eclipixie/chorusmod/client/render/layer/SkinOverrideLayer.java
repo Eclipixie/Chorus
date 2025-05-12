@@ -23,6 +23,7 @@ public class SkinOverrideLayer<E extends Entity, M extends EntityModel<E>> exten
     public void render(PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, E pLivingEntity, float pLimbSwing, float pLimbSwingAmount, float pPartialTick, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         for (ItemStack iStack : pLivingEntity.getArmorSlots()) {
             if (iStack.getItem() instanceof SculkExoskeletonArmor sculkExoskeletonArmor) {
+                // cutout skin
                 VertexConsumer vertexConsumer = pBuffer.getBuffer(
                     RenderType.entityCutoutNoCull(
                             new ResourceLocation(sculkExoskeletonArmor.getSkinTexture(null))));
@@ -30,12 +31,15 @@ public class SkinOverrideLayer<E extends Entity, M extends EntityModel<E>> exten
                 getParentModel().renderToBuffer(pPoseStack, vertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY,
                         1F, 1F, 1F, 1F);
 
+                // emissive skin
                 vertexConsumer = pBuffer.getBuffer(
                         RenderType.entityTranslucentEmissive(
                                 new ResourceLocation(sculkExoskeletonArmor.getSkinTexture("emissive"))));
 
                 getParentModel().renderToBuffer(pPoseStack, vertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY,
                         1F, 1F, 1F, sculkExoskeletonArmor.getGlowValue(pPackedLight));
+
+                break;
             }
         }
     }
