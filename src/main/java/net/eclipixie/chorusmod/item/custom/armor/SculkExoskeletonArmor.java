@@ -27,13 +27,6 @@ public class SculkExoskeletonArmor extends ArmorItem {
     }
 
     @Override
-    public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
-        if (pEntity instanceof Player player && this.type == Type.CHESTPLATE) {
-            player.setInvisible(ArmorSetCore.checkSet(ModArmorMaterials.SCULK_EXOSKELETON, player));
-        }
-    }
-
-    @Override
     public boolean canBeDepleted() { return false; }
 
     @Override
@@ -48,8 +41,19 @@ public class SculkExoskeletonArmor extends ArmorItem {
 
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        return Objects.equals(type, "emissive") ? ChorusMod.MOD_ID + ":textures/entity/armor/sculk_exoskeleton_3_emissive_2d.png" :
-                ChorusMod.MOD_ID + ":textures/entity/armor/sculk_exoskeleton_3_2d.png";
+        String path = ChorusMod.MOD_ID + ":textures/entity/armor/sculk_exoskeleton_3";
+        path += Objects.equals(type, "emissive") ? "_emissive" : "";
+        path += "_extension_2d.png";
+
+        return path;
+    }
+
+    public String getSkinTexture(String type) {
+        String path = ChorusMod.MOD_ID + ":textures/entity/armor/sculk_exoskeleton_3";
+        path += Objects.equals(type, "emissive") ? "_emissive" : "";
+        path += "_skin_2d.png";
+
+        return path;
     }
 
     public float getGlowValue(int pPackedLight) {
