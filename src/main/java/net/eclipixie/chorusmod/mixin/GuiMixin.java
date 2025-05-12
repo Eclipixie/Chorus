@@ -35,7 +35,7 @@ public class GuiMixin {
 
     /**
      * @author Eclipixie
-     * @reason Custom spyglass HUD overlays
+     * @reason Custom spyglass HUD overlays - better to overwrite this than to try and inject into GuiGraphics.blit()
      */
     @Overwrite
     public void renderSpyglassOverlay(GuiGraphics pGuiGraphics, float pScopeScale) {
@@ -54,6 +54,7 @@ public class GuiMixin {
         int l = (this.screenHeight - j) / 2;
         int i1 = k + i;
         int j1 = l + j;
+        
         // modified: changed SPYGLASS_SCOPE_LOCATION
         pGuiGraphics.blit(SPYGLASS_SCOPE_LOCATIONS.get(heldItemType), k, l, -90, 0.0F, 0.0F, i, j, i, j);
         pGuiGraphics.fill(RenderType.guiOverlay(), 0, j1, this.screenWidth, this.screenHeight, -90, -16777216);

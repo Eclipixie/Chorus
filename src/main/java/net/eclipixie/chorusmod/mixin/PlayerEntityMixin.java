@@ -7,7 +7,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Player.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
@@ -19,10 +21,10 @@ public abstract class PlayerEntityMixin extends LivingEntity {
      * @author Eclipixie
      * @reason Required for custom spyglasses
      */
-    @Overwrite
-    public boolean isScoping() {
+    @Inject(method = "isScoping", at = @At("HEAD"), cancellable = true)
+    public void headIsScoping(CallbackInfoReturnable<Boolean> ci) {
         // modified: checks tag rather than item
-        return (this.isUsingItem() &&
+        ci.setReturnValue(this.isUsingItem() &&
                 this.getUseItem().is(ModTags.Items.IS_SPYGLASS));
     }
 }
