@@ -1,10 +1,7 @@
 package net.eclipixie.chorusmod.block;
 
 import net.eclipixie.chorusmod.ChorusMod;
-import net.eclipixie.chorusmod.block.custom.EndStoneRail;
-import net.eclipixie.chorusmod.block.custom.SculkCorruptedEndermanBlock;
-import net.eclipixie.chorusmod.block.custom.SculkHarvesterBlock;
-import net.eclipixie.chorusmod.block.custom.VoidglassBlock;
+import net.eclipixie.chorusmod.block.custom.*;
 import net.eclipixie.chorusmod.item.ModItems;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -30,6 +27,8 @@ public class ModBlocks {
             () -> new SculkHarvesterBlock(BlockBehaviour.Properties.copy(Blocks.SCULK_CATALYST).noOcclusion()));
     public static final RegistryObject<Block> END_STONE_RAIL = registerBlock("end_stone_rail",
             () -> new EndStoneRail(BlockBehaviour.Properties.copy(Blocks.PEARLESCENT_FROGLIGHT)));
+    public static final RegistryObject<Block> SCULK_SPRING =registerBlock("sculk_spring",
+            () -> new SculkSpringBlock(BlockBehaviour.Properties.copy(Blocks.POWDER_SNOW)));
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);

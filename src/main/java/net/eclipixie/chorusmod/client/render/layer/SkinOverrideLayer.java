@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class SkinOverrideLayer<E extends Entity, M extends EntityModel<E>> extends RenderLayer<E, M> {
 
@@ -20,13 +21,13 @@ public class SkinOverrideLayer<E extends Entity, M extends EntityModel<E>> exten
     }
 
     @Override
-    public void render(PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, E pLivingEntity, float pLimbSwing, float pLimbSwingAmount, float pPartialTick, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+    public void render(@NotNull PoseStack pPoseStack, @NotNull MultiBufferSource pBuffer, int pPackedLight, E pLivingEntity, float pLimbSwing, float pLimbSwingAmount, float pPartialTick, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         for (ItemStack iStack : pLivingEntity.getArmorSlots()) {
             if (iStack.getItem() instanceof SculkExoskeletonArmor sculkExoskeletonArmor) {
                 // cutout skin
                 VertexConsumer vertexConsumer = pBuffer.getBuffer(
                     RenderType.entityCutoutNoCull(
-                            new ResourceLocation(sculkExoskeletonArmor.getSkinTexture(null))));
+                            ResourceLocation.fromNamespaceAndPath("minecraft", sculkExoskeletonArmor.getSkinTexture(null))));
 
                 getParentModel().renderToBuffer(pPoseStack, vertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY,
                         1F, 1F, 1F, 1F);
@@ -34,7 +35,7 @@ public class SkinOverrideLayer<E extends Entity, M extends EntityModel<E>> exten
                 // emissive skin
                 vertexConsumer = pBuffer.getBuffer(
                         RenderType.entityTranslucentEmissive(
-                                new ResourceLocation(sculkExoskeletonArmor.getSkinTexture("emissive"))));
+                                ResourceLocation.fromNamespaceAndPath("minecraft", sculkExoskeletonArmor.getSkinTexture("emissive"))));
 
                 getParentModel().renderToBuffer(pPoseStack, vertexConsumer, pPackedLight, OverlayTexture.NO_OVERLAY,
                         1F, 1F, 1F, sculkExoskeletonArmor.getGlowValue(pPackedLight));

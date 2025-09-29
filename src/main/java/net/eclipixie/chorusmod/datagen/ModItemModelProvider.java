@@ -19,7 +19,7 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.LinkedHashMap;
 
 public class ModItemModelProvider extends ItemModelProvider {
-    private static LinkedHashMap<ResourceKey<TrimMaterial>, Float> trimMaterials = new LinkedHashMap<>();
+    private static final LinkedHashMap<ResourceKey<TrimMaterial>, Float> trimMaterials = new LinkedHashMap<>();
     static {
         trimMaterials.put(TrimMaterials.QUARTZ, 0.1F);
         trimMaterials.put(TrimMaterials.IRON, 0.2F);
@@ -41,8 +41,8 @@ public class ModItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         simpleItem(ModItems.ENDER_SHARD, "generated");
 
-        withExistingParent("sculk_corrupted_enderman", new ResourceLocation("item/generated"))
-                .texture("layer0", new ResourceLocation("chorusmod", "item/sculk_corrupted_enderman"));
+        withExistingParent("sculk_corrupted_enderman", ResourceLocation.fromNamespaceAndPath("minecraft", "item/generated"))
+                .texture("layer0", ResourceLocation.fromNamespaceAndPath("chorusmod", "item/sculk_corrupted_enderman"));
 
         simpleItem(ModItems.SCULK_EXOSKELETON_HELMET, "generated");
         simpleItem(ModItems.SCULK_EXOSKELETON_CHESTPLATE, "generated");
@@ -53,19 +53,19 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item, String type) {
+        assert item.getId() != null;
         return withExistingParent(item.getId().getPath(),
-                new ResourceLocation("item/" + type)
+                ResourceLocation.fromNamespaceAndPath("minecraft", "item/" + type)
         ).texture("layer0",
-                new ResourceLocation(ChorusMod.MOD_ID,"item/" + item.getId().getPath()));
+                ResourceLocation.fromNamespaceAndPath(ChorusMod.MOD_ID,"item/" + item.getId().getPath()));
     }
 
     private void trimmedArmorItem(RegistryObject<Item> itemRegistryObject) {
         final String MOD_ID = ChorusMod.MOD_ID; // Change this to your mod id
 
         if(itemRegistryObject.get() instanceof ArmorItem armorItem) {
-            trimMaterials.entrySet().forEach(entry -> {
-                ResourceKey<TrimMaterial> trimMaterial = entry.getKey();
-                float trimValue = entry.getValue();
+            trimMaterials.forEach((trimMaterial, value) -> {
+                float trimValue = value;
 
                 String armorType = switch (armorItem.getEquipmentSlot()) {
                     case HEAD -> "helmet";
@@ -78,9 +78,9 @@ public class ModItemModelProvider extends ItemModelProvider {
                 String armorItemPath = "item/" + armorItem;
                 String trimPath = "trims/items/" + armorType + "_trim_" + trimMaterial.location().getPath();
                 String currentTrimName = armorItemPath + "_" + trimMaterial.location().getPath() + "_trim";
-                ResourceLocation armorItemResLoc = new ResourceLocation(MOD_ID, armorItemPath);
-                ResourceLocation trimResLoc = new ResourceLocation(trimPath); // minecraft namespace
-                ResourceLocation trimNameResLoc = new ResourceLocation(MOD_ID, currentTrimName);
+                ResourceLocation armorItemResLoc = ResourceLocation.fromNamespaceAndPath(MOD_ID, armorItemPath);
+                ResourceLocation trimResLoc = ResourceLocation.fromNamespaceAndPath("minecraft", trimPath); // minecraft namespace
+                ResourceLocation trimNameResLoc = ResourceLocation.fromNamespaceAndPath(MOD_ID, currentTrimName);
 
                 // This is used for making the ExistingFileHelper acknowledge that this texture exist, so this will
                 // avoid an IllegalArgumentException
@@ -93,13 +93,14 @@ public class ModItemModelProvider extends ItemModelProvider {
                         .texture("layer1", trimResLoc);
 
                 // Non-trimmed armorItem file (normal variant)
+                assert itemRegistryObject.getId() != null;
                 this.withExistingParent(itemRegistryObject.getId().getPath(),
                                 mcLoc("item/generated"))
                         .override()
                         .model(new ModelFile.UncheckedModelFile(trimNameResLoc))
                         .predicate(mcLoc("trim_type"), trimValue).end()
                         .texture("layer0",
-                                new ResourceLocation(MOD_ID,
+                                ResourceLocation.fromNamespaceAndPath(MOD_ID,
                                         "item/" + itemRegistryObject.getId().getPath()));
             });
         }

@@ -35,6 +35,8 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.SCULK_CORRUPTED_ENDERMAN.get());
                         output.accept(ModBlocks.SCULK_HARVESTER.get());
 
+                        output.accept(ModBlocks.SCULK_SPRING.get());
+
                         output.accept(ModBlocks.END_STONE_RAIL.get());
                     })
                     .build());

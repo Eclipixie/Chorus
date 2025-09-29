@@ -8,6 +8,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 // Made with Blockbench 4.12.4
 // Exported for Minecraft version 1.17 or later with Mojang mappings
@@ -15,7 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class SculkExoskeletonModel3 extends ArmorModelBase {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(
             ChorusMod.MOD_ID, "sculkexoskeletonmodel3"), "main");
     private final ModelPart head;
     private final ModelPart hat;
@@ -66,7 +67,7 @@ public class SculkExoskeletonModel3 extends ArmorModelBase {
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         head.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         hat.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         body.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);

@@ -9,7 +9,7 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 public class PacketHandler {
-    private static final SimpleChannel INSTANCE = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(ChorusMod.MOD_ID, "main"))
+    private static final SimpleChannel INSTANCE = NetworkRegistry.ChannelBuilder.named(ResourceLocation.fromNamespaceAndPath(ChorusMod.MOD_ID, "main"))
             .serverAcceptedVersions((version) -> true)
             .clientAcceptedVersions((version) -> true)
             .networkProtocolVersion(() -> String.valueOf(1))

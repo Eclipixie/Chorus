@@ -26,9 +26,9 @@ public class GuiMixin {
 
     @Unique
     private static final Map<Type, ResourceLocation> SPYGLASS_SCOPE_LOCATIONS = Map.of(
-            VoidburstSpyglassItem.class, new ResourceLocation(
+            VoidburstSpyglassItem.class, ResourceLocation.fromNamespaceAndPath(
                     "chorusmod", "textures/gui/voidburst_spyglass_zoom_overlay.png"),
-            SoundsightSpyglassItem.class, new ResourceLocation(
+            SoundsightSpyglassItem.class, ResourceLocation.fromNamespaceAndPath(
                     "chorusmod", "textures/gui/soundsight_spyglass_zoom_overlay.png"),
             SpyglassItem.class, SPYGLASS_SCOPE_LOCATION
     );
@@ -40,6 +40,7 @@ public class GuiMixin {
     @Overwrite
     public void renderSpyglassOverlay(GuiGraphics pGuiGraphics, float pScopeScale) {
         // added: getting held item and verifying presence of scope
+        assert Minecraft.getInstance().player != null;
         Item heldItem = Minecraft.getInstance().player.getUseItem().getItem();
         Type heldItemType = heldItem.getClass();
 

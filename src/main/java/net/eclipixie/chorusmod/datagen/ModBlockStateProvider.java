@@ -5,6 +5,7 @@ import net.eclipixie.chorusmod.block.ModBlocks;
 import net.eclipixie.chorusmod.block.custom.SculkCorruptedEndermanBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
@@ -22,6 +23,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
         blockWithRenderType(ModBlocks.VOIDGLASS.get(), "voidglass", "translucent");
 
         blockWithCustomModel(ModBlocks.SCULK_HARVESTER.get(), "sculk_harvester_3d", "sculk_harvester_2d");
+
+        simpleBlockWithItem(ModBlocks.SCULK_SPRING.get(), new ModelFile.UncheckedModelFile(
+                ResourceLocation.fromNamespaceAndPath(ChorusMod.MOD_ID, "block/sculk_spring")));
 
         // Register blockstate with two variants
         getVariantBuilder(ModBlocks.SCULK_CORRUPTED_ENDERMAN.get())

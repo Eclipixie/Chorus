@@ -16,6 +16,6 @@ public class ModToolTiers {
     public static final Tier SCULK = TierSortingRegistry.registerTier(
             new ForgeTier(4, 1500, 8f, 5, 0,
                     Tags.Blocks.NEEDS_NETHERITE_TOOL, () -> Ingredient.of(Items.ECHO_SHARD)),
-            new ResourceLocation(ChorusMod.MOD_ID, "sculk"), List.of(Tiers.DIAMOND), List.of()
+            ResourceLocation.fromNamespaceAndPath(ChorusMod.MOD_ID, "sculk"), List.of(Tiers.DIAMOND), List.of()
     );
 }
