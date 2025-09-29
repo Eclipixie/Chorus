@@ -7,12 +7,17 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
 public class SculkExoskeletonArmor extends ArmorItem {
@@ -22,6 +27,12 @@ public class SculkExoskeletonArmor extends ArmorItem {
 
     @Override
     public boolean canBeDepleted() { return false; }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public boolean overrideOtherStackedOnMe(ItemStack pStack, ItemStack pOther, Slot pSlot, ClickAction pAction, Player pPlayer, SlotAccess pAccess) {
+        return true;
+    }
 
     @Override
     public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.extensions.common.IClientItemExtensions> consumer) {
@@ -48,6 +59,12 @@ public class SculkExoskeletonArmor extends ArmorItem {
         path += "_skin_2d.png";
 
         return path;
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public boolean isFoil(ItemStack pStack) {
+        return false;
     }
 
     public float getGlowValue(int pPackedLight) {
