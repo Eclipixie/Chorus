@@ -1,6 +1,7 @@
 package net.eclipixie.chorusmod.datagen;
 
 import net.eclipixie.chorusmod.ChorusMod;
+import net.eclipixie.chorusmod.fluid.ModFluids;
 import net.eclipixie.chorusmod.item.ModItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
@@ -49,10 +50,12 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.SCULK_EXOSKELETON_LEGGINGS, "generated");
         simpleItem(ModItems.SCULK_EXOSKELETON_BOOTS, "generated");
 
+        simpleItem(ModFluids.LIQUID_XP.bucket, "generated");
+
         simpleItem(ModItems.SCULK_SONIC_CHANNELER, "handheld");
     }
 
-    private ItemModelBuilder simpleItem(RegistryObject<Item> item, String type) {
+    private ItemModelBuilder simpleItem(RegistryObject<? extends Item> item, String type) {
         assert item.getId() != null;
         return withExistingParent(item.getId().getPath(),
                 ResourceLocation.fromNamespaceAndPath("minecraft", "item/" + type)

@@ -1,6 +1,7 @@
 package net.eclipixie.chorusmod.datagen.loot;
 
 import net.eclipixie.chorusmod.block.ModBlocks;
+import net.eclipixie.chorusmod.fluid.ModFluids;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
@@ -30,6 +31,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.dropSelf(ModBlocks.SCULK_CORRUPTED_ENDERMAN.get());
         this.dropSelf(ModBlocks.SCULK_HARVESTER.get());
         this.add(ModBlocks.SCULK_SPRING.get(), noDrop());
+        this.add(ModFluids.LIQUID_XP.block.get(), noDrop());
 
         this.dropSelf(ModBlocks.END_STONE_RAIL.get());
     }

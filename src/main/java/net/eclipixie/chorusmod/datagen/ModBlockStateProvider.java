@@ -3,6 +3,7 @@ package net.eclipixie.chorusmod.datagen;
 import net.eclipixie.chorusmod.ChorusMod;
 import net.eclipixie.chorusmod.block.ModBlocks;
 import net.eclipixie.chorusmod.block.custom.SculkCorruptedEndermanBlock;
+import net.eclipixie.chorusmod.fluid.ModFluids;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -54,6 +55,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
                             .rotationY(y)
                             .build();
                 });
+
+        simpleBlock(ModFluids.LIQUID_XP.block.get());
 
         simpleBlockWithItem(ModBlocks.END_STONE_RAIL.get(), models().cubeColumn(
                 "end_stone_rail",

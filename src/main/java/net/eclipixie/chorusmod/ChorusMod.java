@@ -6,6 +6,7 @@ import net.eclipixie.chorusmod.block.entity.ModBlockEntities;
 import net.eclipixie.chorusmod.entity.ModEntities;
 import net.eclipixie.chorusmod.event.BlockEvents;
 import net.eclipixie.chorusmod.event.EntityEvents;
+import net.eclipixie.chorusmod.fluid.ModFluids;
 import net.eclipixie.chorusmod.item.ModCreativeModeTabs;
 import net.eclipixie.chorusmod.item.ModItems;
 import net.eclipixie.chorusmod.mobeffects.ModMobEffects;
@@ -36,6 +37,7 @@ public class ChorusMod {
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModBlockEntities.register(modEventBus);
+        ModFluids.register(modEventBus);
         ModEntities.register(modEventBus);
         ModMobEffects.register(modEventBus);
 

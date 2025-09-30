@@ -2,6 +2,7 @@ package net.eclipixie.chorusmod.item;
 
 import net.eclipixie.chorusmod.ChorusMod;
 import net.eclipixie.chorusmod.block.ModBlocks;
+import net.eclipixie.chorusmod.fluid.ModFluids;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -38,6 +39,8 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.SCULK_SPRING.get());
 
                         output.accept(ModBlocks.END_STONE_RAIL.get());
+
+                        output.accept(ModFluids.LIQUID_XP.bucket.get());
                     })
                     .build());
 
