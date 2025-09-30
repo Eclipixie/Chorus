@@ -1,5 +1,6 @@
 package net.eclipixie.chorusmod.block.entity;
 
+import net.eclipixie.chorusmod.fluid.ModFluids;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -8,17 +9,17 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.*;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
@@ -27,16 +28,18 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Stack;
 
-public class SculkHarvesterBlockEntity extends BlockEntity implements WorldlyContainer {
+public class SculkHarvesterBlockEntity extends SculkXPBlockEntity implements WorldlyContainer {
     public final ItemStackHandler itemStackHandler = new ItemStackHandler(2) {
         @Override
         protected void onContentsChanged(int slot) {
-            setChanged();
-            assert level != null;
-            if(!level.isClientSide())
-                level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
+            super.onContentsChanged(slot);
+            SculkHarvesterBlockEntity.this.sendUpdate();
         }
     };
+
+    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
+
+    private static final int HARVEST_QUANTITY = 67;
 
     public static final int INPUT_SLOT = 0;
     public static final int OUTPUT_SLOT = 1;
@@ -44,39 +47,10 @@ public class SculkHarvesterBlockEntity extends BlockEntity implements WorldlyCon
     private static final int HARVEST_DELAY = 10;
     private static final int HARVEST_RANGE = 32;
 
-    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
-
-    protected final ContainerData containerData;
-    private int progressRequirement = 5;
-    private int progress;
-
     Stack<BlockPos> tendril = new Stack<>();
 
     public SculkHarvesterBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(ModBlockEntities.SCULK_HARVESTER_ENTITY.get(), pPos, pBlockState);
-        this.containerData = new ContainerData() {
-            @Override
-            public int get(int pIndex) {
-                return switch (pIndex) {
-                    case 0 -> SculkHarvesterBlockEntity.this.progress;
-                    case 1 -> SculkHarvesterBlockEntity.this.progressRequirement;
-                    default -> 0;
-                };
-            }
-
-            @Override
-            public void set(int pIndex, int pValue) {
-                switch (pIndex) {
-                    case 0 -> SculkHarvesterBlockEntity.this.progress = pValue;
-                    case 1 -> SculkHarvesterBlockEntity.this.progressRequirement = pValue;
-                }
-            }
-
-            @Override
-            public int getCount() {
-                return 2;
-            }
-        };
     }
 
     @Override
@@ -105,7 +79,6 @@ public class SculkHarvesterBlockEntity extends BlockEntity implements WorldlyCon
     @Override
     protected void saveAdditional(CompoundTag pTag) {
         pTag.put("inventory", itemStackHandler.serializeNBT());
-        pTag.putInt("sculk_harvester.progress", progress);
 
         super.saveAdditional(pTag);
     }
@@ -113,7 +86,6 @@ public class SculkHarvesterBlockEntity extends BlockEntity implements WorldlyCon
     @Override
     public void load(CompoundTag pTag) {
         itemStackHandler.deserializeNBT(pTag.getCompound("inventory"));
-        progress = pTag.getInt("sculk_harvester.progress");
 
         super.load(pTag);
     }
@@ -125,6 +97,7 @@ public class SculkHarvesterBlockEntity extends BlockEntity implements WorldlyCon
             container.setItem(i, itemStackHandler.getStackInSlot(i));
         }
 
+        assert this.level != null;
         Containers.dropContents(this.level, this.worldPosition, container);
     }
 
@@ -196,12 +169,14 @@ public class SculkHarvesterBlockEntity extends BlockEntity implements WorldlyCon
         if (found || pLevel.getGameTime() % HARVEST_DELAY != 0) return;
 
         // time to harvest
-        if (progress < progressRequirement) {
-            progress++;
+        if (liquidXPTank.getFluidAmount() + HARVEST_QUANTITY < liquidXPTank.getCapacity()) {
+            liquidXPTank.fill(
+                    new FluidStack(ModFluids.LIQUID_XP.source.get().getSource(), HARVEST_QUANTITY),
+                    IFluidHandler.FluidAction.EXECUTE);
             pLevel.setBlock(tendril.pop(), Blocks.AIR.defaultBlockState(), 3);
         }
 
-        if (progress < progressRequirement) return;
+        if (liquidXPTank.getFluidAmount() < 333) return;
 
         if (!hasRecipe()) return;
 
@@ -233,9 +208,6 @@ public class SculkHarvesterBlockEntity extends BlockEntity implements WorldlyCon
 
             tendril.push(positionCandidate);
             found = positionCandidate;
-
-//            System.out.println(mags[0] + " " + mags[1] + " " + mags[2]);
-            System.out.println(positionCandidates.size());
         }
 
         return found;
@@ -246,7 +218,7 @@ public class SculkHarvesterBlockEntity extends BlockEntity implements WorldlyCon
     }
 
     protected void completeCraft() {
-        progress -= progressRequirement;
+        liquidXPTank.drain(333, IFluidHandler.FluidAction.EXECUTE);
         itemStackHandler.extractItem(INPUT_SLOT, 1, false);
         itemStackHandler.setStackInSlot(OUTPUT_SLOT,
                 new ItemStack(Items.EXPERIENCE_BOTTLE, itemStackHandler.getStackInSlot(OUTPUT_SLOT).getCount() + 1));
@@ -269,12 +241,12 @@ public class SculkHarvesterBlockEntity extends BlockEntity implements WorldlyCon
     }
 
     @Override
-    public ItemStack getItem(int pSlot) {
+    public @NotNull ItemStack getItem(int pSlot) {
         return itemStackHandler.getStackInSlot(pSlot);
     }
 
     @Override
-    public ItemStack removeItem(int pSlot, int pAmount) {
+    public @NotNull ItemStack removeItem(int pSlot, int pAmount) {
         ItemStack stack = itemStackHandler.getStackInSlot(pSlot);
         int remaining = Math.max(stack.getCount() - pAmount, 0);
 
@@ -292,7 +264,7 @@ public class SculkHarvesterBlockEntity extends BlockEntity implements WorldlyCon
     }
 
     @Override
-    public ItemStack removeItemNoUpdate(int pSlot) {
+    public @NotNull ItemStack removeItemNoUpdate(int pSlot) {
         ItemStack stack = itemStackHandler.getStackInSlot(pSlot);
 
         itemStackHandler.setStackInSlot(pSlot, ItemStack.EMPTY);
@@ -301,11 +273,11 @@ public class SculkHarvesterBlockEntity extends BlockEntity implements WorldlyCon
     }
 
     @Override
-    public void setItem(int pSlot, ItemStack pStack) {
+    public void setItem(int pSlot, @NotNull ItemStack pStack) {
         itemStackHandler.setStackInSlot(pSlot, pStack);
     }
 
-    public boolean stillValid(Player pPlayer) {
+    public boolean stillValid(@NotNull Player pPlayer) {
         return Container.stillValidBlockEntity(this, pPlayer);
     }
 
@@ -319,23 +291,23 @@ public class SculkHarvesterBlockEntity extends BlockEntity implements WorldlyCon
 
     //region side-specific
     @Override
-    public boolean canTakeItem(Container pTarget, int pIndex, ItemStack pStack) {
+    public boolean canTakeItem(@NotNull Container pTarget, int pIndex, @NotNull ItemStack pStack) {
         return pIndex == OUTPUT_SLOT;
     }
 
     @Override
-    public int[] getSlotsForFace(Direction pSide) {
+    public int @NotNull [] getSlotsForFace(@NotNull Direction pSide) {
         if (pSide == Direction.DOWN) return new int[]{ OUTPUT_SLOT };
         else return new int[]{ INPUT_SLOT };
     }
 
     @Override
-    public boolean canPlaceItemThroughFace(int pIndex, ItemStack pItemStack, @Nullable Direction pDirection) {
+    public boolean canPlaceItemThroughFace(int pIndex, @NotNull ItemStack pItemStack, @Nullable Direction pDirection) {
         return this.canPlaceItem(pIndex, pItemStack);
     }
 
     @Override
-    public boolean canTakeItemThroughFace(int pIndex, ItemStack pStack, Direction pDirection) {
+    public boolean canTakeItemThroughFace(int pIndex, @NotNull ItemStack pStack, @NotNull Direction pDirection) {
         return pDirection == Direction.DOWN && pIndex == OUTPUT_SLOT;
     }
     //endregion

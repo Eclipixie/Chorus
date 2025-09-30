@@ -31,29 +31,6 @@ public class ModFluids {
             BlockBehaviour.Properties.copy(Blocks.WATER),
             new Item.Properties().stacksTo(1));
 
-//    public class RegistryFluidSet {
-//        public String name;
-//        public RegistryObject<FlowingFluid> fluidSource;
-//        public RegistryObject<FlowingFluid> fluidFlowing;
-//        public ForgeFlowingFluid.Properties fluidProperties;
-//        public RegistryObject<LiquidBlock> fluidBlock;
-//
-//        public RegistryFluidSet(String name, FluidType.Properties fluidProperties) {
-//            this.name = name;
-//
-//            this.fluidSource = FLUIDS.register(name, () -> new ForgeFlowingFluid.Source(this.fluidProperties));
-//            this.fluidFlowing = FLUIDS.register(name + "_flowing", () -> new ForgeFlowingFluid.Flowing(this.fluidProperties));
-//            this.fluidBlock = ModBlocks.BLOCKS.register(name + "_block",
-//                    () -> new LiquidBlock(() -> fluidSource.get(), BlockBehaviour.Properties.of()
-//                            .noCollission().strength(100f).noLootTable()));
-//
-//            this.fluidProperties = new ForgeFlowingFluid.Properties(
-//                    () -> new FluidType(fluidProperties),
-//                    this.fluidSource, this.fluidFlowing)
-//                    .block(this.fluidBlock);
-//        }
-//    }
-
     public static void register(IEventBus eventBus) {
         FLUIDS.register(eventBus);
         FLUID_TYPES.register(eventBus);
